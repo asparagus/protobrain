@@ -5,6 +5,7 @@ Module for handling Layers.
 
 Layers in the brain are composed of neurons grouped in minicolumns.
 """
+import numpy as np
 from brain.minicolumn import SimpleMiniColumnFactory
 from util.factory import Factory, ConstantFactory
 
@@ -25,6 +26,13 @@ class Layer:
     def num_minicolumns(self):
         """The number of mini columns in this layer."""
         return len(self._minicolumns)
+
+    def __str__(self):
+        """The string representation of a layer."""
+        return "%s: \n%s" % (self.__class__, str(np.asarray([
+            minicol.outputs.astype(np.int32)
+            for minicol in self._minicolumns
+        ])))
 
 
 class LayerFactory(Factory):

@@ -5,6 +5,7 @@ Module for handling MiniColumns.
 
 MiniColumns are a grouping of neurons that are connected to the same inputs.
 """
+import json
 import numpy as np
 from brain.event import Event
 from brain.neuron import Neuron, SimpleNeuronFactory
@@ -28,12 +29,15 @@ class MiniColumn:
         self._inputs = np.zeros(synapses)
         self._allocate_input = [self._allocation_function(i)
                                 for i in range(synapses)]
+        self._outputs = np.zeros(len(neurons))
 
     def process(self):
         """Compute the value for this minicolumn and conditionally spike."""
-        self.active = any(
+        self._outputs = np.fromiter(
             neuron.compute(self._inputs)
-            for neuron in self._neurons)
+            for neuron in self._neurons
+        )
+        self.active = any(self._outputs)
 
     def connect(self, other_mini_columns):
         """Create connections to the outputs of other minicolumns."""
@@ -68,6 +72,10 @@ class MiniColumn:
         return len(self._neurons)
 
     @property
+    def outputs(self):
+        return self._outputs
+
+    @property
     def spike(self):
         """The spike event to subscribe to."""
         return self._spike
@@ -79,6 +87,13 @@ class MiniColumn:
     def _set_input(self, i, value):
         """Helper function to set the ith input to a given value."""
         self._inputs[i] = value
+
+    def __str__(self):
+        """The string representation of a mini column."""
+        return "%s: %s" % (self.__class__, json.dumps({
+            "inputs": str(self._inputs.astype(np.int32)),
+            "activations": str(self._outputs.astype(np.int32))
+            }, indent=4))
 
 
 class MiniColumnFactory(Factory):

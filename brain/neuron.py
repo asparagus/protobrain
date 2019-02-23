@@ -45,13 +45,13 @@ class Neuron:
         """Get the threshold value for this neuron."""
         return self._threshold
 
-    def __repr__(self):
+    def __str__(self):
         """String representation of this neuron."""
-        return json.dumps({
+        return "%s: %s" % (self.__class__, json.dumps({
             "threshold": self._threshold,
             "synapse_threshold": self._synapse_threshold,
             "synaptic_permanence": str(self._synaptic_permanence)
-        })
+        }, indent=4))
 
 
 class NeuronFactory(Factory):
