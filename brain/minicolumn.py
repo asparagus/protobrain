@@ -73,6 +73,7 @@ class MiniColumn:
 
     @property
     def outputs(self):
+        """Get the last-computed outputs."""
         return self._outputs
 
     @property
