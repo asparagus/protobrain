@@ -33,10 +33,10 @@ class MiniColumn:
 
     def process(self):
         """Compute the value for this minicolumn and conditionally spike."""
-        self._outputs = np.fromiter(
+        self._outputs = np.asarray([
             neuron.compute(self._inputs)
             for neuron in self._neurons
-        )
+        ])
         self.active = any(self._outputs)
 
     def connect(self, other_mini_columns):

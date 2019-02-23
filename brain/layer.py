@@ -22,6 +22,11 @@ class Layer:
         for minicolumn in self._minicolumns:
             minicolumn.connect(other._minicolumns)
 
+    def process(self):
+        """Computes the output and propagates for all the minicolumns."""
+        for minicolumn in self._minicolumns:
+            minicolumn.process()
+
     @property
     def num_minicolumns(self):
         """The number of mini columns in this layer."""
