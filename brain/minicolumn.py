@@ -31,6 +31,10 @@ class MiniColumn:
                                 for i in range(synapses)]
         self._outputs = np.zeros(len(neurons))
 
+    def __iter__(self):
+        """An iterator to go through the minicolumn's neurons."""
+        return iter(self._neurons)
+
     def process(self):
         """Compute the value for this minicolumn and conditionally spike."""
         self._outputs = np.asarray([
@@ -83,11 +87,14 @@ class MiniColumn:
 
     def _allocation_function(self, i):
         """Helper function to create a lambda to set the ith input."""
-        return lambda value: self._set_input(i, value)
+        return lambda value: self._set_input(value, i)
 
-    def _set_input(self, i, value):
+    def _set_input(self, value, i=None):
         """Helper function to set the ith input to a given value."""
-        self._inputs[i] = value
+        if i is None:
+            self._inputs[:] = value
+        else:
+            self._inputs[i] = value
 
     def __str__(self):
         """The string representation of a mini column."""

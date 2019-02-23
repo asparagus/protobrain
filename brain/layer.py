@@ -17,6 +17,10 @@ class Layer:
         """Initialize the layer."""
         self._minicolumns = minicolumns
 
+    def __iter__(self):
+        """An iterator to go through the layer's minicolumns."""
+        return iter(self._minicolumns)
+
     def connect(self, other):
         """Connect this layer to the outputs of another."""
         for minicolumn in self._minicolumns:
