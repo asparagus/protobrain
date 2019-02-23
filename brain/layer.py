@@ -23,6 +23,7 @@ class Layer:
 
     @property
     def num_minicolumns(self):
+        """The number of mini columns in this layer."""
         return len(self._minicolumns)
 
 

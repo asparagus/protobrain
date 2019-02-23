@@ -14,7 +14,7 @@ class Neuron:
     """Class for implementing the Neuron."""
 
     def __init__(self, threshold, synapse_threshold, synaptic_permanence):
-        """Initialize the neuron with the given dendrites."""
+        """Initialize the neuron."""
         self._threshold = threshold
         self._synapse_threshold = synapse_threshold
         self._synaptic_permanence = synaptic_permanence
@@ -31,7 +31,8 @@ class Neuron:
         return np.dot(active_synapses, inputs) / len(inputs) > self.threshold
 
     @property
-    def num_dendrites(self):
+    def num_synapses(self):
+        """The number of synapses in this neuron."""
         return len(self._synaptic_permanence)
 
     @property

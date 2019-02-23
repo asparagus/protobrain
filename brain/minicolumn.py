@@ -17,17 +17,17 @@ class MiniColumn:
     def __init__(self, neurons):
         """Initializes the minicolumn."""
         assert len(neurons) > 0
-        dendrites = neurons[0].num_dendrites
-        assert all(n.num_dendrites == dendrites
+        synapses = neurons[0].num_synapses
+        assert all(n.num_synapses == synapses
                    for n in neurons)
 
         self._neurons = neurons
-        self._num_dendrites = dendrites
+        self._num_synapses = synapses
         self._spike = Event()
         self._active = False
-        self._inputs = np.zeros(dendrites)
+        self._inputs = np.zeros(synapses)
         self._allocate_input = [self._allocation_function(i)
-                                for i in range(dendrites)]
+                                for i in range(synapses)]
 
     def process(self):
         """Compute the value for this minicolumn and conditionally spike."""
@@ -39,7 +39,7 @@ class MiniColumn:
         """Create connections to the outputs of other minicolumns."""
         sampled_mini_columns = np.random.choice(
             other_mini_columns,
-            size=self.num_dendrites,
+            size=self.num_synapses,
             replace=False
         )
         for i, mini_column in enumerate(sampled_mini_columns):
@@ -58,9 +58,9 @@ class MiniColumn:
         self._active = new_value
 
     @property
-    def num_dendrites(self):
-        """The number of dendrites per neuron."""
-        return self._num_dendrites
+    def num_synapses(self):
+        """The number of synapses per neuron."""
+        return self._num_synapses
 
     @property
     def num_neurons(self):

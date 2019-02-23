@@ -11,12 +11,12 @@ def neuron_factory():
 
 def test_output_true(neuron_factory):
     neuron = neuron_factory.create()
-    _input = np.ones(neuron.num_dendrites)
+    _input = np.ones(neuron.num_synapses)
     _expected = True
     assert neuron.compute(_input) == _expected
 
 def test_output_false(neuron_factory):
     neuron = neuron_factory.create()
-    _input = np.zeros(neuron.num_dendrites)
+    _input = np.zeros(neuron.num_synapses)
     _expected = False
     assert neuron.compute(_input) == _expected
