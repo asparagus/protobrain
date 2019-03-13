@@ -1,10 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-"""
-Module for handling a sensory layer.
-
-A neuron is the atomic unit of computations in the brain.
-"""
+"""Module for handling a sensory layer."""
 import numpy as np
 from brain.event import Event
 
@@ -19,23 +15,20 @@ class Sensor:
 
     def set_values(self, values):
         """Set the new values and propagate them through the emit event."""
-        self._values[:] = values
-        copy = np.array(self._values)
-        self.emit(copy)
+        if len(values) != len(self):
+            raise ValueError("Sensor values length do not match specification")
+        self._values = values
+        self.emit(values)
 
     @property
     def emit(self):
         """Get the event for subscribing to the input stream."""
         return self._emit
 
-    @property
-    def num_values(self):
+    def __len__(self):
+        """Get the number of values returned by this sensor."""
         return len(self._values)
 
-
-# class SensorGroup(Sensor):
-#     """A class for handling groups of sensors."""
-
-#     def __init__(self, sensors):
-#         super().__init__(sum(s.num_values for s in sensors))
-#         self._sensors = sensors
+    def __str__(self):
+        """The string representation of this sensor is its values."""
+        return "%s: %s" % (self.__class__, self._values)
