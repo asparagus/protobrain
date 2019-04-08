@@ -3,6 +3,8 @@
 """Module for handling a sensory layer."""
 import numpy as np
 from brain import event
+from brain import snapshot_pb2
+from util import sdr
 
 
 class Sensor:
@@ -32,3 +34,9 @@ class Sensor:
     def __str__(self):
         """The string representation of this sensor is its values."""
         return "%s: %s" % (self.__class__, self._values)
+
+    def snapshot(self, snapshot_to_fill):
+        """Get a snapshot of the sensor state."""
+        snap = snapshot_to_fill or snapshot_pb2.SensorSnapshot()
+        sdr.np_to_sdr(self._values, snap.sdr)
+        return snap

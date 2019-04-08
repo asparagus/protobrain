@@ -7,7 +7,9 @@ MiniColumns are a grouping of neurons that are connected to the same inputs.
 """
 import numpy as np
 from brain import neuron
+from brain import snapshot_pb2
 from util import factory
+from util import sdr
 
 
 class Neocortex:
@@ -36,9 +38,18 @@ class Neocortex:
         return len(self._layers)
 
     def __str__(self):
+        """The string representation of the neocortex's state."""
         return "%s:\n\t%s" % (
             self.__class__,
             "\n\t".join([str(layer) for layer in self._layers]))
+
+    def snapshot(self, snapshot_to_fill):
+        """Get a snapshot of the neocortex state."""
+        snap = snapshot_to_fill or snapshot_pb2.CorticalSnapshot()
+        for layer in self._layers:
+            layer_sdr = snap.sdr.add()
+            sdr.np_to_sdr(layer.outputs, layer_sdr)
+        return snap
 
 
 class NeocortexFactory(factory.Factory):

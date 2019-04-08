@@ -4,8 +4,8 @@ import numpy as np
 from brain.snapshot_pb2 import SparseDistributedRepresentation
 
 
-def np_to_sdr(arr):
-    sdr = SparseDistributedRepresentation()
+def np_to_sdr(arr, out=None):
+    sdr = out or SparseDistributedRepresentation()
     sdr.dimensions.extend(arr.shape)
 
     on_bits = np.flatnonzero(arr)

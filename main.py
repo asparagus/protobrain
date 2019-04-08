@@ -31,7 +31,9 @@ if __name__ == '__main__':
     for i in range(1, 6):
         sens.set_values(cycle.encode(i))
         neoctx.process()
+        snapshot = brn.snapshot()
 
         print(sens)
         print(neoctx)
+        print(snapshot)
         time.sleep(0.5)

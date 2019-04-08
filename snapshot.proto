@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+package brain;
+
+message SparseDistributedRepresentation {
+  repeated int32 dimensions = 1;
+  repeated int32 on_bits = 2;
+}
+
+message Snapshot {
+  optional CorticalSnapshot cortex = 1;
+  optional SensorSnapshot sensor = 2;
+}
+
+message CorticalSnapshot {
+  repeated SparseDistributedRepresentation sdr = 1;
+}
+
+message SensorSnapshot {
+  optional SparseDistributedRepresentation sdr = 1;
+  optional float encodedValue = 2;
+}
