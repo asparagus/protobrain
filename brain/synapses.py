@@ -3,8 +3,7 @@
 """Module for handling neuron connections."""
 import abc
 import numpy as np
-from brain.event import Event
-from brain.neurons import NeuronInput
+from brain import neuron
 
 
 class Synapses(abc.ABC):
@@ -22,7 +21,7 @@ class Synapses(abc.ABC):
             )
 
         neurons.emit.subscribe(lambda values:
-            self.propagate(NeuronInput(values, self.strength)))
+            self.propagate(neuron.NeuronInput(values, self.strength)))
 
     @abc.abstractmethod
     def propagate(self, arg):

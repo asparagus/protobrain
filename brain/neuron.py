@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 """Module dealing with Neurons."""
 import numpy as np
-from brain.event import Event
-from util.factory import Factory, ConstantFactory
+from brain import event
+from util import factory
 
 
 class Neurons:
@@ -14,7 +14,7 @@ class Neurons:
         self._inputs = None
         self._feedback = None
         self._inhibitions = None
-        self._emit = Event()
+        self._emit = event.Event()
 
     def compute(self):
         self._outputs = self._computation(self._inputs, self._feedback, self._inhibitions)
@@ -58,7 +58,7 @@ class NeuronInput:
         return self._values
 
 
-class NeuronsFactory(Factory):
+class NeuronsFactory(factory.Factory):
     """A factory class for Neurons."""
 
     def __init__(self, number_factory, computation_factory):
@@ -79,6 +79,6 @@ class SimpleNeuronsFactory(NeuronsFactory):
     def __init__(self, number, computation):
         """Initialize the factory."""
         super().__init__(
-            ConstantFactory(number),
-            ConstantFactory(computation)
+            factory.ConstantFactory(number),
+            factory.ConstantFactory(computation)
         )

@@ -2,12 +2,9 @@
 # -*- coding: utf-8 -*-
 import pytest
 import numpy as np
-from brain.computation import StandardComputation
-from brain.neurons import SimpleNeuronsFactory
-from brain.sensor import Sensor
-from brain.synapses import InputConnection
-from brain.synapses import FeedbackConnection
-from brain.synapses import InhibitionConnection
+from brain import neuron
+from brain import sensor
+from brain import synapses
 
 
 @pytest.fixture(scope='module')
@@ -20,7 +17,10 @@ def dummy_output(num_neurons):
 
 @pytest.fixture(scope='module')
 def neuron_factory(num_neurons, dummy_output, dummy_computation):
-    return SimpleNeuronsFactory(num_neurons, dummy_computation(dummy_output))
+    return neuron.SimpleNeuronsFactory(
+        num_neurons,
+        dummy_computation(dummy_output)
+    )
 
 @pytest.fixture(scope='module')
 def num_inputs():
@@ -29,24 +29,25 @@ def num_inputs():
 @pytest.fixture
 def sensor_input(num_inputs):
     return np.random.rand(num_inputs)
+
 # def test_self_inhibition_symmetry():
 #     layer = neurons(3)
-#     inhibitions = InhibitionConnection(layer)
+#     inhibitions = synapses.InhibitionConnection(layer)
 
 #     assert np.allclose(inhibitions._mask, inhibitions._mask.T, atol=1e-8)
 
 # def test_self_inhibition_non_reflective():
 #     layer = neurons(3)
-#     inhibitions = InhibitionConnection(layer)
+#     inhibitions = synapses.InhibitionConnection(layer)
 
 #     assert np.all(np.diagonal(inhibitions._mask) == False)
 
 def test_input_propagation_from_sensor(sensor_input, neuron_factory):
-    sensor = Sensor(len(sensor_input))
+    sens = sensor.Sensor(len(sensor_input))
     layer = neuron_factory()
-    InputConnection(sensor, layer)
+    synapses.InputConnection(sens, layer)
 
-    sensor.emit(sensor_input)
+    sens.emit(sensor_input)
 
     assert layer._inputs is not None
     assert np.all(layer._inputs.values == sensor_input)
@@ -54,7 +55,7 @@ def test_input_propagation_from_sensor(sensor_input, neuron_factory):
 def test_input_propagation_from_layer(dummy_output, neuron_factory):
     layer1 = neuron_factory()
     layer2 = neuron_factory()
-    InputConnection(layer1, layer2)
+    synapses.InputConnection(layer1, layer2)
 
     layer1.compute()
 
@@ -64,7 +65,7 @@ def test_input_propagation_from_layer(dummy_output, neuron_factory):
 def test_inhibition_propagation(dummy_output, neuron_factory):
     layer1 = neuron_factory()
     layer2 = neuron_factory()
-    InhibitionConnection(layer1, layer2)
+    synapses.InhibitionConnection(layer1, layer2)
 
     layer1.compute()
 
@@ -74,7 +75,7 @@ def test_inhibition_propagation(dummy_output, neuron_factory):
 def test_feedback_propagation(dummy_output, neuron_factory):
     layer1 = neuron_factory()
     layer2 = neuron_factory()
-    FeedbackConnection(layer1, layer2)
+    synapses.FeedbackConnection(layer1, layer2)
 
     layer1.compute()
 

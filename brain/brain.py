@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import numpy as np
-from brain.synapses import InputConnection
+from brain import synapses
 
 
 class Brain:
@@ -12,7 +12,7 @@ class Brain:
         self._neocortex = neocortex
         self._sensor = sensor
 
-        InputConnection(sensor, neocortex._layers[0])
+        synapses.InputConnection(sensor, neocortex._layers[0])
 
     @property
     def num_inputs(self):

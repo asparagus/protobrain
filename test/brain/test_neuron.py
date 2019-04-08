@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 import pytest
 import numpy as np
-from brain.event import EventVerifier
-from brain.neurons import SimpleNeuronsFactory
+from brain import event
+from brain import neuron
 
 
 @pytest.fixture(scope='module')
@@ -16,7 +16,10 @@ def expected_output(num_neurons):
 
 @pytest.fixture(scope='module')
 def neuron_factory(num_neurons, expected_output, dummy_computation):
-    return SimpleNeuronsFactory(num_neurons, dummy_computation(expected_output))
+    return neuron.SimpleNeuronsFactory(
+        num_neurons,
+        dummy_computation(expected_output)
+    )
 
 def test_null_inputs(neuron_factory):
     neurons = neuron_factory()
@@ -31,7 +34,7 @@ def test_length(num_neurons, neuron_factory):
 
 def test_emit(neuron_factory, expected_output):
     neurons = neuron_factory()
-    verify = EventVerifier(neurons.emit)
+    verify = event.EventVerifier(neurons.emit)
 
     neurons.compute()
     assert verify.has_run

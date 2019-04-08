@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """Module for handling a sensory layer."""
 import numpy as np
-from brain.event import Event
+from brain import event
 
 
 class Sensor:
@@ -11,7 +11,7 @@ class Sensor:
     def __init__(self, num_values):
         """Initialize the Sensor."""
         self._values = np.zeros(num_values)
-        self._emit = Event()
+        self._emit = event.Event()
 
     def set_values(self, values):
         """Set the new values and propagate them through the emit event."""

@@ -2,16 +2,9 @@
 # -*- coding: utf-8 -*-
 import pytest
 import numpy as np
-from brain.event import EventVerifier
-from brain.neurons import SimpleNeuronsFactory
-from brain.synapses import InputConnection
-from brain.synapses import FeedbackConnection
-from brain.synapses import InhibitionConnection
-from brain.synaptic_policy import BackwardSynapticPolicy
-from brain.synaptic_policy import ForwardSynapticPolicy
-from brain.synaptic_policy import NullSynapticPolicy
-from brain.synaptic_policy import ReflexiveSynapticPolicy
-from brain.synaptic_policy import SpecificSynapticPolicy
+from brain import neuron
+from brain import synapses
+from brain import synaptic_policy
 
 
 @pytest.fixture(scope='module')
@@ -20,7 +13,7 @@ def num_neurons():
 
 @pytest.fixture(scope='module')
 def neuron_factory(num_neurons, dummy_computation):
-    return SimpleNeuronsFactory(
+    return neuron.SimpleNeuronsFactory(
         num_neurons,
         dummy_computation(np.zeros(num_neurons))
     )
@@ -30,13 +23,13 @@ def layers(neuron_factory):
     return [neuron_factory() for _ in range(3)]
 
 def test_null_synaptic_policy(layers):
-    nsp = NullSynapticPolicy()
+    nsp = synaptic_policy.NullSynapticPolicy()
     connections = nsp.execute(layers)
 
     assert len(connections) == 0
 
 def test_forward_synaptic_policy(layers):
-    fsp = ForwardSynapticPolicy(InputConnection)
+    fsp = synaptic_policy.ForwardSynapticPolicy(synapses.InputConnection)
     connections = fsp.execute(layers)
 
     assert len(connections) == len(layers) - 1
@@ -52,7 +45,7 @@ def test_forward_synaptic_policy(layers):
         assert layers[i]._inputs is not None
 
 def test_backward_synaptic_policy(layers):
-    bsp = BackwardSynapticPolicy(InputConnection)
+    bsp = synaptic_policy.BackwardSynapticPolicy(synapses.InputConnection)
     connections = bsp.execute(layers)
 
     assert len(connections) == len(layers) - 1
@@ -68,8 +61,7 @@ def test_backward_synaptic_policy(layers):
         assert layers[i]._inputs is not None
 
 def test_reflexive_synaptic_policy(layers):
-    rsp = ReflexiveSynapticPolicy(InputConnection)
-
+    rsp = synaptic_policy.ReflexiveSynapticPolicy(synapses.InputConnection)
     connections = rsp.execute(layers)
 
     assert len(connections) == len(layers)
@@ -84,7 +76,9 @@ def test_reflexive_synaptic_policy(layers):
         assert layers[i]._inputs is not None
 
 def test_specific_synaptic_policy(layers):
-    ssp = SpecificSynapticPolicy(InputConnection, {2: 1})
+    ssp = synaptic_policy.SpecificSynapticPolicy(
+        synapses.InputConnection, {2: 1}
+    )
     connections = ssp.execute(layers)
 
     assert len(connections) == 1

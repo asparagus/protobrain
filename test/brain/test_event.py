@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pytest
-from brain.event import Event, EventVerifier, EventQueue
+from brain import event
 
 
 @pytest.fixture
@@ -10,32 +10,32 @@ def rand():
     return np.random.rand()
 
 def test_verifier(rand):
-    event = Event()
-    verify = EventVerifier(event)
+    e = event.Event()
+    verify = event.EventVerifier(e)
 
     assert not verify.has_run
     assert verify.count == 0
-    event(rand)
+    e(rand)
 
     assert verify.has_run
     assert verify.count == 1
     assert verify.run_args == [rand]
 
 def test_event_queue_tick(rand):
-    queue = EventQueue()
-    event = Event()
-    verify = EventVerifier(event)
+    queue = event.EventQueue()
+    e = event.Event()
+    verify = event.EventVerifier(e)
 
-    queue.add(event, rand)
+    queue.add(e, rand)
     queue.tick()
 
     assert verify.has_run
     assert verify.run_args == [rand]
 
 def test_event_queue_add_within_tick(rand):
-    queue = EventQueue()
-    events = [Event() for _ in range(3)]
-    verifiers = [EventVerifier(events[i]) for i in range(3)]
+    queue = event.EventQueue()
+    events = [event.Event() for _ in range(3)]
+    verifiers = [event.EventVerifier(events[i]) for i in range(3)]
 
     # Third event will be added when the first event is triggered
     # on the first tick.

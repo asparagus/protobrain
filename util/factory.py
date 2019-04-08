@@ -1,12 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from abc import ABC, abstractmethod
+import abc
 
 
-class Factory(ABC):
+class Factory(abc.ABC):
     """The base for any factory class."""
 
-    @abstractmethod
+    @abc.abstractmethod
     def create(self):
         raise NotImplementedError()
 

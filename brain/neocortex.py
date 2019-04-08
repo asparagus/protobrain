@@ -6,11 +6,8 @@ Module for modelling the Neocortex.
 MiniColumns are a grouping of neurons that are connected to the same inputs.
 """
 import numpy as np
-from brain.neurons import SimpleNeuronsFactory
-from util.factory import Factory, ConstantFactory
-from brain.synapses import InputConnection
-from brain.synapses import FeedbackConnection
-from brain.synapses import InhibitionConnection
+from brain import neuron
+from util import factory
 
 
 class Neocortex:
@@ -44,7 +41,7 @@ class Neocortex:
             "\n\t".join([str(layer) for layer in self._layers]))
 
 
-class NeocortexFactory(Factory):
+class NeocortexFactory(factory.Factory):
     """A Factory class for the Neocortex."""
 
     def __init__(self,
@@ -77,8 +74,11 @@ class SimpleNeocortexFactory(NeocortexFactory):
                  synaptic_policies,
                  learning_function):
         """Initialize the factory."""
-        num_layers_factory = ConstantFactory(num_layers)
-        neurons_factory = SimpleNeuronsFactory(num_neurons, computation)
+        num_layers_factory = factory.ConstantFactory(num_layers)
+        neurons_factory = neuron.SimpleNeuronsFactory(
+            num_neurons,
+            computation
+        )
 
         super().__init__(
             num_layers_factory,
