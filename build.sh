@@ -1,2 +1,2 @@
-protoc --python_out=brain experiment.proto
-protoc --python_out=brain snapshot.proto
+protoc -I=brain --python_out=brain brain/proto/experiment.proto
+protoc -I=brain --python_out=brain brain/proto/snapshot.proto

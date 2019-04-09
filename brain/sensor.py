@@ -3,8 +3,8 @@
 """Module for handling a sensory layer."""
 import numpy as np
 from brain import event
-from brain import snapshot_pb2
-from util import sdr
+from brain.proto import snapshot_pb2
+from brain.util import sdr
 
 
 class Sensor:

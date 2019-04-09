@@ -3,7 +3,7 @@
 """Module dealing with Neurons."""
 import numpy as np
 from brain import event
-from util import factory
+from brain.util import factory
 
 
 class Neurons:

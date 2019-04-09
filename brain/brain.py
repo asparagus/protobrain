@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from brain import synapses
-from brain import snapshot_pb2
+from brain.proto import snapshot_pb2
 
 
 class Brain:

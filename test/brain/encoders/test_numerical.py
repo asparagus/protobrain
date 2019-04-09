@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from encoders import numerical
+from brain.encoders import numerical
 
 
 def test_fixed_range():

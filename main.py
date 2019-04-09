@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import time
-from encoders import numerical
 from brain import brain
 from brain import computation
 from brain import neocortex
@@ -9,8 +8,9 @@ from brain import neuron
 from brain import sensor
 from brain import synapses
 from brain import synaptic_policy
-from brain import experiment_pb2
-from util import factory
+from brain.encoders import numerical
+from brain.proto import experiment_pb2
+from brain.util import factory
 
 
 if __name__ == '__main__':
