@@ -57,19 +57,19 @@ class NeocortexFactory(factory.Factory):
 
     def __init__(self,
                  num_layers_factory,
-                 neurons_factory,
+                 neuron_factory,
                  synaptic_policies,
                  learning_function):
         """Initialize the factory."""
         self._num_layers_factory = num_layers_factory
-        self._neurons_factory = neurons_factory
+        self._neuron_factory = neuron_factory
         self._synaptic_policies = synaptic_policies
         self._learning_function = learning_function
 
     def create(self):
         """Create a neocortex."""
         num_layers = self._num_layers_factory()
-        layers = [self._neurons_factory() for i in range(num_layers)]
+        layers = [self._neuron_factory() for i in range(num_layers)]
         return Neocortex(layers,
                          self._synaptic_policies,
                          self._learning_function)
@@ -86,14 +86,14 @@ class SimpleNeocortexFactory(NeocortexFactory):
                  learning_function):
         """Initialize the factory."""
         num_layers_factory = factory.ConstantFactory(num_layers)
-        neurons_factory = neuron.SimpleNeuronsFactory(
+        neuron_factory = neuron.SimpleNeuronsFactory(
             num_neurons,
             computation
         )
 
         super().__init__(
             num_layers_factory,
-            neurons_factory,
+            neuron_factory,
             synaptic_policies,
             learning_function
         )

@@ -19,10 +19,10 @@ def test_propagation(dummy_computation):
         learning_function=None
     )
 
-    neoctx = neocortex_factory()
-    last_layer = neoctx._layers[-1]
+    cortex = neocortex_factory()
+    last_layer = cortex._layers[-1]
     verify = event.EventVerifier(last_layer.emit)
 
-    neoctx.process()
+    cortex.process()
 
     assert verify.has_run

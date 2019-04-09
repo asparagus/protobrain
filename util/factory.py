@@ -23,3 +23,14 @@ class ConstantFactory(Factory):
     def create(self):
         """Return the constant."""
         return self.constant
+
+class SequenceFactory(Factory):
+    """A Factory class that returns objects from a sequence."""
+
+    def __init__(self, sequence):
+        """Initializes the factory with the sequence of objects to create."""
+        self.sequence = iter(sequence)
+
+    def create(self):
+        """Return the next item."""
+        return next(self.sequence)
