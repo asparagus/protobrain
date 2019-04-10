@@ -15,9 +15,9 @@ from shutil import rmtree
 from setuptools import find_packages, setup, Command
 
 # Package meta-data.
-NAME = 'brain'
+NAME = 'protobrain'
 DESCRIPTION = 'Experimental project for machine learning.'
-URL = 'https://github.com/Ariel-Perez/brain'
+URL = 'https://github.com/Ariel-Perez/protobrain'
 EMAIL = 'arielperezch@gmail.com'
 AUTHOR = 'Ariel Perez'
 REQUIRES_PYTHON = '>=3.6.0'
@@ -108,7 +108,7 @@ setup(
     url=URL,
     # packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
     # If your package is a single module, use this instead of 'packages':
-    py_modules=['brain'],
+    py_modules=['protobrain'],
 
     # entry_points={
     #     'console_scripts': ['mycli=mymodule:cli'],
