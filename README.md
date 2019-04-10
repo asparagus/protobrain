@@ -1,4 +1,4 @@
-# Brain
+# protobrain
 This is an experimental project for machine learning techniques.
 
 Loosely based on Hierarchical Temporal Memory by [Numenta](http://numenta.org/).
@@ -10,4 +10,4 @@ python -m pytest
 ```
 
 ## License
-brain is a project licensed under GNU GPLv3.
+protobrain is a project licensed under GNU GPLv3.

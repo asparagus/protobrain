@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import pytest
-from brain.computation import Computation
+from protobrain.computation import Computation
 
 
 class DummyComputation(Computation):

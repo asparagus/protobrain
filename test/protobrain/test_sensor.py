@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 import pytest
 import numpy as np
-from brain import event
-from brain import sensor
+from protobrain import event
+from protobrain import sensor
 
 
 def test_wrong_length():

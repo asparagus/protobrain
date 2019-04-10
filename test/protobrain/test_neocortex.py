@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pytest
-from brain import event
-from brain import neocortex
-from brain import synapses
-from brain import synaptic_policy
+from protobrain import event
+from protobrain import neocortex
+from protobrain import synapses
+from protobrain import synaptic_policy
 
 
 def test_propagation(dummy_computation):

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pytest
-from brain import event
+from protobrain import event
 
 
 @pytest.fixture

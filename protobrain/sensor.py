@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 """Module for handling a sensory layer."""
 import numpy as np
-from brain import event
-from brain.proto import snapshot_pb2
-from brain.util import sdr
+from protobrain import event
+from protobrain.proto import snapshot_pb2
+from protobrain.util import sdr
 
 
 class Sensor:

@@ -1,10 +1,14 @@
 syntax = "proto2";
 
-package brain;
+package protobrain;
 
 message SparseDistributedRepresentation {
   repeated int32 dimensions = 1;
   repeated int32 on_bits = 2;
+}
+
+message History {
+  repeated Snapshot snapshot = 1;
 }
 
 message Snapshot {

@@ -3,7 +3,7 @@
 """Module for handling neuron connections."""
 import abc
 import numpy as np
-from brain import neuron
+from protobrain import neuron
 
 
 class Synapses(abc.ABC):

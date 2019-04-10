@@ -1,8 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import numpy as np
-from brain import computation
-from brain import neuron
+from protobrain import computation
+from protobrain import neuron
 
 
 def test_standard_computation():

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from brain.encoders import numerical
+from protobrain.encoders import numerical
 
 
 def test_fixed_range():

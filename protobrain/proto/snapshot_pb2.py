@@ -17,8 +17,8 @@ _sym_db = _symbol_database.Default()
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='proto/snapshot.proto',
-  package='brain',
-  serialized_pb=_b('\n\x14proto/snapshot.proto\x12\x05\x62rain\"F\n\x1fSparseDistributedRepresentation\x12\x12\n\ndimensions\x18\x01 \x03(\x05\x12\x0f\n\x07on_bits\x18\x02 \x03(\x05\"Z\n\x08Snapshot\x12\'\n\x06\x63ortex\x18\x01 \x01(\x0b\x32\x17.brain.CorticalSnapshot\x12%\n\x06sensor\x18\x02 \x01(\x0b\x32\x15.brain.SensorSnapshot\"G\n\x10\x43orticalSnapshot\x12\x33\n\x03sdr\x18\x01 \x03(\x0b\x32&.brain.SparseDistributedRepresentation\"[\n\x0eSensorSnapshot\x12\x33\n\x03sdr\x18\x01 \x01(\x0b\x32&.brain.SparseDistributedRepresentation\x12\x14\n\x0c\x65ncodedValue\x18\x02 \x01(\x02')
+  package='protobrain',
+  serialized_pb=_b('\n\x14proto/snapshot.proto\x12\nprotobrain\"F\n\x1fSparseDistributedRepresentation\x12\x12\n\ndimensions\x18\x01 \x03(\x05\x12\x0f\n\x07on_bits\x18\x02 \x03(\x05\"1\n\x07History\x12&\n\x08snapshot\x18\x01 \x03(\x0b\x32\x14.protobrain.Snapshot\"d\n\x08Snapshot\x12,\n\x06\x63ortex\x18\x01 \x01(\x0b\x32\x1c.protobrain.CorticalSnapshot\x12*\n\x06sensor\x18\x02 \x01(\x0b\x32\x1a.protobrain.SensorSnapshot\"L\n\x10\x43orticalSnapshot\x12\x38\n\x03sdr\x18\x01 \x03(\x0b\x32+.protobrain.SparseDistributedRepresentation\"`\n\x0eSensorSnapshot\x12\x38\n\x03sdr\x18\x01 \x01(\x0b\x32+.protobrain.SparseDistributedRepresentation\x12\x14\n\x0c\x65ncodedValue\x18\x02 \x01(\x02')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -27,20 +27,20 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 _SPARSEDISTRIBUTEDREPRESENTATION = _descriptor.Descriptor(
   name='SparseDistributedRepresentation',
-  full_name='brain.SparseDistributedRepresentation',
+  full_name='protobrain.SparseDistributedRepresentation',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='dimensions', full_name='brain.SparseDistributedRepresentation.dimensions', index=0,
+      name='dimensions', full_name='protobrain.SparseDistributedRepresentation.dimensions', index=0,
       number=1, type=5, cpp_type=1, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='on_bits', full_name='brain.SparseDistributedRepresentation.on_bits', index=1,
+      name='on_bits', full_name='protobrain.SparseDistributedRepresentation.on_bits', index=1,
       number=2, type=5, cpp_type=1, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -57,57 +57,20 @@ _SPARSEDISTRIBUTEDREPRESENTATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=31,
-  serialized_end=101,
+  serialized_start=36,
+  serialized_end=106,
 )
 
 
-_SNAPSHOT = _descriptor.Descriptor(
-  name='Snapshot',
-  full_name='brain.Snapshot',
+_HISTORY = _descriptor.Descriptor(
+  name='History',
+  full_name='protobrain.History',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='cortex', full_name='brain.Snapshot.cortex', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='sensor', full_name='brain.Snapshot.sensor', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=103,
-  serialized_end=193,
-)
-
-
-_CORTICALSNAPSHOT = _descriptor.Descriptor(
-  name='CorticalSnapshot',
-  full_name='brain.CorticalSnapshot',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='sdr', full_name='brain.CorticalSnapshot.sdr', index=0,
+      name='snapshot', full_name='protobrain.History.snapshot', index=0,
       number=1, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -124,27 +87,94 @@ _CORTICALSNAPSHOT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=195,
-  serialized_end=266,
+  serialized_start=108,
+  serialized_end=157,
 )
 
 
-_SENSORSNAPSHOT = _descriptor.Descriptor(
-  name='SensorSnapshot',
-  full_name='brain.SensorSnapshot',
+_SNAPSHOT = _descriptor.Descriptor(
+  name='Snapshot',
+  full_name='protobrain.Snapshot',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='sdr', full_name='brain.SensorSnapshot.sdr', index=0,
+      name='cortex', full_name='protobrain.Snapshot.cortex', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='encodedValue', full_name='brain.SensorSnapshot.encodedValue', index=1,
+      name='sensor', full_name='protobrain.Snapshot.sensor', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=159,
+  serialized_end=259,
+)
+
+
+_CORTICALSNAPSHOT = _descriptor.Descriptor(
+  name='CorticalSnapshot',
+  full_name='protobrain.CorticalSnapshot',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='sdr', full_name='protobrain.CorticalSnapshot.sdr', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=261,
+  serialized_end=337,
+)
+
+
+_SENSORSNAPSHOT = _descriptor.Descriptor(
+  name='SensorSnapshot',
+  full_name='protobrain.SensorSnapshot',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='sdr', full_name='protobrain.SensorSnapshot.sdr', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='encodedValue', full_name='protobrain.SensorSnapshot.encodedValue', index=1,
       number=2, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -161,15 +191,17 @@ _SENSORSNAPSHOT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=268,
-  serialized_end=359,
+  serialized_start=339,
+  serialized_end=435,
 )
 
+_HISTORY.fields_by_name['snapshot'].message_type = _SNAPSHOT
 _SNAPSHOT.fields_by_name['cortex'].message_type = _CORTICALSNAPSHOT
 _SNAPSHOT.fields_by_name['sensor'].message_type = _SENSORSNAPSHOT
 _CORTICALSNAPSHOT.fields_by_name['sdr'].message_type = _SPARSEDISTRIBUTEDREPRESENTATION
 _SENSORSNAPSHOT.fields_by_name['sdr'].message_type = _SPARSEDISTRIBUTEDREPRESENTATION
 DESCRIPTOR.message_types_by_name['SparseDistributedRepresentation'] = _SPARSEDISTRIBUTEDREPRESENTATION
+DESCRIPTOR.message_types_by_name['History'] = _HISTORY
 DESCRIPTOR.message_types_by_name['Snapshot'] = _SNAPSHOT
 DESCRIPTOR.message_types_by_name['CorticalSnapshot'] = _CORTICALSNAPSHOT
 DESCRIPTOR.message_types_by_name['SensorSnapshot'] = _SENSORSNAPSHOT
@@ -177,28 +209,35 @@ DESCRIPTOR.message_types_by_name['SensorSnapshot'] = _SENSORSNAPSHOT
 SparseDistributedRepresentation = _reflection.GeneratedProtocolMessageType('SparseDistributedRepresentation', (_message.Message,), dict(
   DESCRIPTOR = _SPARSEDISTRIBUTEDREPRESENTATION,
   __module__ = 'proto.snapshot_pb2'
-  # @@protoc_insertion_point(class_scope:brain.SparseDistributedRepresentation)
+  # @@protoc_insertion_point(class_scope:protobrain.SparseDistributedRepresentation)
   ))
 _sym_db.RegisterMessage(SparseDistributedRepresentation)
+
+History = _reflection.GeneratedProtocolMessageType('History', (_message.Message,), dict(
+  DESCRIPTOR = _HISTORY,
+  __module__ = 'proto.snapshot_pb2'
+  # @@protoc_insertion_point(class_scope:protobrain.History)
+  ))
+_sym_db.RegisterMessage(History)
 
 Snapshot = _reflection.GeneratedProtocolMessageType('Snapshot', (_message.Message,), dict(
   DESCRIPTOR = _SNAPSHOT,
   __module__ = 'proto.snapshot_pb2'
-  # @@protoc_insertion_point(class_scope:brain.Snapshot)
+  # @@protoc_insertion_point(class_scope:protobrain.Snapshot)
   ))
 _sym_db.RegisterMessage(Snapshot)
 
 CorticalSnapshot = _reflection.GeneratedProtocolMessageType('CorticalSnapshot', (_message.Message,), dict(
   DESCRIPTOR = _CORTICALSNAPSHOT,
   __module__ = 'proto.snapshot_pb2'
-  # @@protoc_insertion_point(class_scope:brain.CorticalSnapshot)
+  # @@protoc_insertion_point(class_scope:protobrain.CorticalSnapshot)
   ))
 _sym_db.RegisterMessage(CorticalSnapshot)
 
 SensorSnapshot = _reflection.GeneratedProtocolMessageType('SensorSnapshot', (_message.Message,), dict(
   DESCRIPTOR = _SENSORSNAPSHOT,
   __module__ = 'proto.snapshot_pb2'
-  # @@protoc_insertion_point(class_scope:brain.SensorSnapshot)
+  # @@protoc_insertion_point(class_scope:protobrain.SensorSnapshot)
   ))
 _sym_db.RegisterMessage(SensorSnapshot)
 

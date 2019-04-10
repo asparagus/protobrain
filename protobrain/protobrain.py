@@ -1,27 +1,22 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import numpy as np
-from brain import synapses
-from brain.proto import snapshot_pb2
+from protobrain import synapses
+from protobrain.proto import snapshot_pb2
 
 
-class Brain:
-    """A class for handling a brain."""
+class ProtoBrain:
+    """A class for handling a protobrain."""
 
     def __init__(self, neocortex, sensor):
-        """Initialize the brain."""
+        """Initialize the protobrain."""
         self._neocortex = neocortex
         self._sensor = sensor
 
         synapses.InputConnection(sensor, neocortex._layers[0])
 
-    @property
-    def num_inputs(self):
-        """The number of inputs the brain can receive through its sensors."""
-        return len(self._sensor)
-
     def snapshot(self, snapshot_to_fill=None):
-        """Get a snapshot of the brain state."""
+        """Get a snapshot of the protobrain state."""
         snap = snapshot_to_fill or snapshot_pb2.Snapshot()
         self._sensor.snapshot(snap.sensor)
         self._neocortex.snapshot(snap.cortex)

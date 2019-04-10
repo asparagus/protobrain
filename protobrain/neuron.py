@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 """Module dealing with Neurons."""
 import numpy as np
-from brain import event
-from brain.util import factory
+from protobrain import event
+from protobrain.util import factory
 
 
 class Neurons:

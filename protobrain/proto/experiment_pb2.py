@@ -17,8 +17,8 @@ _sym_db = _symbol_database.Default()
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='proto/experiment.proto',
-  package='brain',
-  serialized_pb=_b('\n\x16proto/experiment.proto\x12\x05\x62rain\"b\n\nExperiment\x12\x0c\n\x04live\x18\x01 \x01(\x08\x12\"\n\x06sensor\x18\x02 \x01(\x0b\x32\x12.brain.SensorSetup\x12\"\n\x06\x63ortex\x18\x03 \x01(\x0b\x32\x12.brain.CortexSetup\"*\n\x0bSensorSetup\x12\x1b\n\x13representation_size\x18\x01 \x01(\x05\"\x1c\n\x0b\x43ortexSetup\x12\r\n\x05layer\x18\x01 \x03(\x05')
+  package='protobrain',
+  serialized_pb=_b('\n\x16proto/experiment.proto\x12\nprotobrain\"{\n\nExperiment\x12\x0c\n\x04live\x18\x01 \x01(\x08\x12\'\n\x06sensor\x18\x02 \x01(\x0b\x32\x17.protobrain.SensorSetup\x12\'\n\x06\x63ortex\x18\x03 \x01(\x0b\x32\x17.protobrain.CortexSetup\x12\r\n\x05iters\x18\x04 \x01(\x05\"*\n\x0bSensorSetup\x12\x1b\n\x13representation_size\x18\x01 \x01(\x05\"\x1c\n\x0b\x43ortexSetup\x12\r\n\x05layer\x18\x01 \x03(\x05')
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -27,29 +27,36 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 _EXPERIMENT = _descriptor.Descriptor(
   name='Experiment',
-  full_name='brain.Experiment',
+  full_name='protobrain.Experiment',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='live', full_name='brain.Experiment.live', index=0,
+      name='live', full_name='protobrain.Experiment.live', index=0,
       number=1, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='sensor', full_name='brain.Experiment.sensor', index=1,
+      name='sensor', full_name='protobrain.Experiment.sensor', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='cortex', full_name='brain.Experiment.cortex', index=2,
+      name='cortex', full_name='protobrain.Experiment.cortex', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='iters', full_name='protobrain.Experiment.iters', index=3,
+      number=4, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -64,20 +71,20 @@ _EXPERIMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=33,
-  serialized_end=131,
+  serialized_start=38,
+  serialized_end=161,
 )
 
 
 _SENSORSETUP = _descriptor.Descriptor(
   name='SensorSetup',
-  full_name='brain.SensorSetup',
+  full_name='protobrain.SensorSetup',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='representation_size', full_name='brain.SensorSetup.representation_size', index=0,
+      name='representation_size', full_name='protobrain.SensorSetup.representation_size', index=0,
       number=1, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -94,20 +101,20 @@ _SENSORSETUP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=133,
-  serialized_end=175,
+  serialized_start=163,
+  serialized_end=205,
 )
 
 
 _CORTEXSETUP = _descriptor.Descriptor(
   name='CortexSetup',
-  full_name='brain.CortexSetup',
+  full_name='protobrain.CortexSetup',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='layer', full_name='brain.CortexSetup.layer', index=0,
+      name='layer', full_name='protobrain.CortexSetup.layer', index=0,
       number=1, type=5, cpp_type=1, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -124,8 +131,8 @@ _CORTEXSETUP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=177,
-  serialized_end=205,
+  serialized_start=207,
+  serialized_end=235,
 )
 
 _EXPERIMENT.fields_by_name['sensor'].message_type = _SENSORSETUP
@@ -137,21 +144,21 @@ DESCRIPTOR.message_types_by_name['CortexSetup'] = _CORTEXSETUP
 Experiment = _reflection.GeneratedProtocolMessageType('Experiment', (_message.Message,), dict(
   DESCRIPTOR = _EXPERIMENT,
   __module__ = 'proto.experiment_pb2'
-  # @@protoc_insertion_point(class_scope:brain.Experiment)
+  # @@protoc_insertion_point(class_scope:protobrain.Experiment)
   ))
 _sym_db.RegisterMessage(Experiment)
 
 SensorSetup = _reflection.GeneratedProtocolMessageType('SensorSetup', (_message.Message,), dict(
   DESCRIPTOR = _SENSORSETUP,
   __module__ = 'proto.experiment_pb2'
-  # @@protoc_insertion_point(class_scope:brain.SensorSetup)
+  # @@protoc_insertion_point(class_scope:protobrain.SensorSetup)
   ))
 _sym_db.RegisterMessage(SensorSetup)
 
 CortexSetup = _reflection.GeneratedProtocolMessageType('CortexSetup', (_message.Message,), dict(
   DESCRIPTOR = _CORTEXSETUP,
   __module__ = 'proto.experiment_pb2'
-  # @@protoc_insertion_point(class_scope:brain.CortexSetup)
+  # @@protoc_insertion_point(class_scope:protobrain.CortexSetup)
   ))
 _sym_db.RegisterMessage(CortexSetup)
 

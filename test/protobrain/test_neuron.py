@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 import pytest
 import numpy as np
-from brain import event
-from brain import neuron
+from protobrain import event
+from protobrain import neuron
 
 
 @pytest.fixture(scope='module')

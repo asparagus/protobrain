@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 import pytest
 import numpy as np
-from brain import neuron
-from brain import synapses
-from brain import synaptic_policy
+from protobrain import neuron
+from protobrain import synapses
+from protobrain import synaptic_policy
 
 
 @pytest.fixture(scope='module')

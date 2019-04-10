@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import numpy as np
-from brain.proto.snapshot_pb2 import SparseDistributedRepresentation
+from protobrain.proto.snapshot_pb2 import SparseDistributedRepresentation
 
 
 def np_to_sdr(arr, out=None):
