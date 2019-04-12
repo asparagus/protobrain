@@ -2,6 +2,10 @@
 # -*- coding: utf-8 -*-
 """Module for handling neuron connections."""
 import numpy as np
+import logging
+
+
+log = logging.getLogger(__name__)
 
 
 class Input(object):
@@ -18,6 +22,7 @@ class Input(object):
     # TODO: Allow providing the function for synapse creation
     def connect(self, output):
         if self._connected_output is output:
+            log.warning('Skipping reconnection of input-output pair')
             return  # Skip
 
         self.synapses = Input._create_synapses(self.shape, output.shape)

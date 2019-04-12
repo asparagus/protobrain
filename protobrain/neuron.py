@@ -86,6 +86,8 @@ class Neurons(object):
             for layer in self._layers:
                 layer.compute(computation_function)
         else:
+            if computation_function is None:
+                log.critical("Missing computation function")
             self.output.values = computation_function(**self._inputs)
 
     @property
