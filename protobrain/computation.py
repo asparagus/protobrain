@@ -10,6 +10,9 @@ class Computation(abc.ABC):
     def __call__(self, inputs, feedback, inhibitions):
         raise NotImplementedError()
 
+    def __repr__(self):
+        return self.__class__.__name__
+
 
 class StandardComputation(Computation):
     def __init__(self, threshold):

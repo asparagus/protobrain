@@ -11,6 +11,10 @@ class Input(object):
         self.synapses = None
         self._connected_output = None
 
+    @property
+    def connected(self):
+        return self._connected_output is not None
+
     # TODO: Allow providing the function for synapse creation
     def connect(self, output):
         if self._connected_output is output:

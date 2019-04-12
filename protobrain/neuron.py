@@ -2,20 +2,36 @@
 # -*- coding: utf-8 -*-
 """Module dealing with Neurons."""
 import numpy as np
+import logging
 from protobrain import computation
 from protobrain import synapses
+
+
+log = logging.getLogger(__name__)
 
 
 class Neurons(object):
     MAIN_INPUT = 'main'
 
-    def __init__(self, units, comp=None):
-        self._passthrough = isinstance(units, list)
+    def __init__(self, units, computation_function=None):
+        self._passthrough = isinstance(units, (list, tuple, Neurons))
         if self._passthrough:
-            self._layers = units
-            # TODO warn if set up seems wrong
-            self._inputs = units[0]._inputs
-            self.output = units[-1].output
+            self._layers = getattr(units, '_layers', units)
+            self._inputs = self._layers[0]._inputs
+            if self._inputs[Neurons.MAIN_INPUT].connected:
+                log.warning(
+                    "Creating Neurons with pre-connected input"
+                )
+
+            self.output = self._layers[-1].output
+
+            internal_computations = self.recursive_retrieve_computations()
+            if computation_function and any(internal_computations):
+                log.warning(
+                    'Overriding computation functions: [\n\t%s]->%s',
+                    '\n\t'.join([repr(c) for c in internal_computations]),
+                    computation_function
+                )
         else:
             self._inputs = {
                 Neurons.MAIN_INPUT: synapses.Input(
@@ -25,7 +41,17 @@ class Neurons(object):
             }
             self.output = synapses.Output(shape=(units,))
 
-        self._computation = comp
+        self._computation = computation_function
+
+    def recursive_retrieve_computations(self):
+        computations = []
+        if self._passthrough:
+            for layer in self._layers:
+                computations.extend(layer.recursive_retrieve_computations())
+        else:
+            computations.append(self._computation)
+
+        return computations
 
     @property
     def input(self):
@@ -53,9 +79,9 @@ class Neurons(object):
 
         self._inputs[name].connect(output)
 
-    def compute(self, computation=None):
+    def compute(self, computation_function=None):
         """Compute the output of this neuron."""
-        computation_function = computation or self._computation
+        computation_function = computation_function or self._computation
         if self._passthrough:
             for layer in self._layers:
                 layer.compute(computation_function)
