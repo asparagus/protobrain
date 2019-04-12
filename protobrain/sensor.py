@@ -1,42 +1,59 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """Module for handling a sensory layer."""
-import numpy as np
-from protobrain import event
-from protobrain.proto import snapshot_pb2
-from protobrain.util import sdr
+import abc
+from protobrain import synapses
+# from protobrain.proto import snapshot_pb2
+# from protobrain.util import sdr
 
 
-class Sensor:
+class Sensor(object):
     """A class for handling input data."""
 
-    def __init__(self, num_values):
+    def __init__(self, encoder):
         """Initialize the Sensor."""
-        self._values = np.zeros(num_values)
-        self._emit = event.Event()
+        self._encoder = encoder
+        self._value = encoder.default_value
+        self.output = synapses.Output(encoder.shape)
 
-    def set_values(self, values):
-        """Set the new values and propagate them through the emit event."""
-        if len(values) != len(self):
-            raise ValueError("Sensor values length do not match specification")
-        self._values = values
-        self.emit(values)
+    def feed(self, value):
+        """Feed a value to the sensor."""
+        self._value = value
+        self.output.values = self._encoder.encode(value)
 
     @property
-    def emit(self):
-        """Get the event for subscribing to the input stream."""
-        return self._emit
+    def value(self):
+        """Get the value encoded by this sensor."""
+        return self._value
 
-    def __len__(self):
-        """Get the number of values returned by this sensor."""
-        return len(self._values)
+    @value.setter
+    def value(self, output):
+        """Set the value encoded by this sensor."""
+        self.feed(value)
 
-    def __str__(self):
-        """The string representation of this sensor is its values."""
-        return "%s: %s" % (self.__class__, self._values)
+    @property
+    def values(self):
+        """The values from the output unit."""
+        return self.output.values
 
-    def snapshot(self, snapshot_to_fill):
-        """Get a snapshot of the sensor state."""
-        snap = snapshot_to_fill or snapshot_pb2.SensorSnapshot()
-        sdr.np_to_sdr(self._values, snap.sdr)
-        return snap
+    @property
+    def shape(self):
+        """The shape of this sensor's outputs."""
+        return self.output.shape
+
+    # def snapshot(self, snapshot_to_fill):
+    #     """Get a snapshot of the sensor state."""
+    #     snap = snapshot_to_fill or snapshot_pb2.SensorSnapshot()
+    #     sdr.np_to_sdr(self.values, snap.sdr)
+    #     return snap
+
+
+class Encoder(abc.ABC):
+
+    def __init__(self, default_value, shape):
+        self.default_value = default_value
+        self.shape = shape
+
+    @abc.abstractmethod
+    def encode(self, value):
+        raise NotImplementedError()

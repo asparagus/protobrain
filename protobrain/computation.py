@@ -15,30 +15,31 @@ class StandardComputation(Computation):
     def __init__(self, threshold):
         self._threshold = threshold
 
-    def __call__(self, inputs, feedback=None, inhibitions=None):
+    def __call__(self, main):
         """
         Compute the neurons' output.
 
         Ignores feedback and inhibitions for now.
         """
-        activations = np.dot(inputs.synaptic_strength, inputs.values)
+        activations = np.dot(main.synapses, main.values)
         return activations > self.threshold
 
     @property
     def threshold(self):
         return self._threshold
 
+
 class SparseComputation(Computation):
     def __init__(self, n):
         self._n = n
 
-    def __call__(self, inputs, feedback=None, inhibitions=None):
+    def __call__(self, main):
         """
         Compute the neurons' output.
 
         Ignores feedback and inhibitions for now.
         """
-        activations = np.dot(inputs.synaptic_strength, inputs.values)
+        activations = np.dot(main.synapses, main.values)
         top_indices = activations.argsort()[-self._n:]
 
         result = np.zeros(len(activations))

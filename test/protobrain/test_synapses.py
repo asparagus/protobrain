@@ -2,82 +2,81 @@
 # -*- coding: utf-8 -*-
 import pytest
 import numpy as np
-from protobrain import neuron
-from protobrain import sensor
 from protobrain import synapses
 
 
 @pytest.fixture(scope='module')
-def num_neurons():
+def shape():
     return 10
 
 @pytest.fixture(scope='module')
-def dummy_output(num_neurons):
-    return np.random.rand(num_neurons) < 0.5
+def expected_output(shape):
+    return np.random.rand(shape) < 0.5
 
-@pytest.fixture(scope='module')
-def neuron_factory(num_neurons, dummy_output, dummy_computation):
-    return neuron.SimpleNeuronsFactory(
-        num_neurons,
-        dummy_computation(dummy_output)
-    )
+def test_merge_output():
+    out1 = synapses.Output(5)
+    out2 = synapses.Output(8)
 
-@pytest.fixture(scope='module')
-def num_inputs():
-    return 10
+    outm = synapses.OutputMerge([out1, out2])
 
-@pytest.fixture
-def sensor_input(num_inputs):
-    return np.random.rand(num_inputs)
+    assert outm.shape == (13,)
 
-# def test_self_inhibition_symmetry():
-#     layer = neurons(3)
-#     inhibitions = synapses.InhibitionConnection(layer)
+def test_slice_output():
+    out1 = synapses.Output(5)
+    outs = out1[3:]
 
-#     assert np.allclose(inhibitions._mask, inhibitions._mask.T, atol=1e-8)
+    assert outs.shape == (2,)
 
-# def test_self_inhibition_non_reflective():
-#     layer = neurons(3)
-#     inhibitions = synapses.InhibitionConnection(layer)
+def test_slice_output_2d():
+    out1 = synapses.Output((10, 5))
+    outs = out1[5:, 3:]
 
-#     assert np.all(np.diagonal(inhibitions._mask) == False)
+    assert outs.shape == (5, 2)
 
-def test_input_propagation_from_sensor(sensor_input, neuron_factory):
-    sens = sensor.Sensor(len(sensor_input))
-    layer = neuron_factory()
-    synapses.InputConnection(sens, layer)
+def test_output_validates_values():
+    out = synapses.Output(10)
 
-    sens.emit(sensor_input)
+    with pytest.raises(ValueError):
+        out.values = np.zeros(11)
 
-    assert layer._inputs is not None
-    assert np.all(layer._inputs.values == sensor_input)
+def test_connect_input_output(shape, expected_output):
+    inp = synapses.Input('', shape)
+    out = synapses.Output(shape)
 
-def test_input_propagation_from_layer(dummy_output, neuron_factory):
-    layer1 = neuron_factory()
-    layer2 = neuron_factory()
-    synapses.InputConnection(layer1, layer2)
+    inp.connect(out)
+    out.values = expected_output
+    assert all(inp.values == expected_output)
 
-    layer1.compute()
+def test_connect_input_merged_output():
+    inp = synapses.Input('', 10)
+    out1 = synapses.Output(5)
+    out2 = synapses.Output(5)
+    out = synapses.OutputMerge([out1, out2])
 
-    assert layer2._inputs is not None
-    assert np.all(layer2._inputs.values == dummy_output)
+    inp.connect(out)
+    out1.values = np.ones(5)
+    out2.values = np.ones(5) * 2
 
-def test_inhibition_propagation(dummy_output, neuron_factory):
-    layer1 = neuron_factory()
-    layer2 = neuron_factory()
-    synapses.InhibitionConnection(layer1, layer2)
+    assert all(inp.values == [1, 1, 1, 1, 1,
+                              2, 2, 2, 2, 2])
 
-    layer1.compute()
+def test_connect_input_sliced_output(shape, expected_output):
+    inp = synapses.Input('', 2)
+    out = synapses.Output(shape)
 
-    assert layer2._inhibitions is not None
-    assert np.all(layer2._inhibitions.values == dummy_output)
+    sliced = out[-2:]
+    inp.connect(sliced)
 
-def test_feedback_propagation(dummy_output, neuron_factory):
-    layer1 = neuron_factory()
-    layer2 = neuron_factory()
-    synapses.FeedbackConnection(layer1, layer2)
+    out.values = expected_output
+    assert all(inp.values == expected_output[-2:])
 
-    layer1.compute()
+def test_connect_2d():
+    shape = (3, 4)
+    expected_out = np.random.rand(*shape)
+    inp = synapses.Input('', shape)
+    out = synapses.Output(shape)
 
-    assert layer2._feedback is not None
-    assert np.all(layer2._feedback.values == dummy_output)
+    inp.connect(out)
+    out.values = expected_out
+    for i in range(shape[0]):
+        assert all(inp.values[i] == expected_out[i])

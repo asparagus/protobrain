@@ -5,7 +5,7 @@ from protobrain.encoders import numerical
 
 def test_fixed_range():
     fixed_range = numerical.FixedRangeEncoder(
-        min=1, max=4, length=5, sparsity=0.4
+        min_value=1, max_value=4, length=5, sparsity=0.4
     )
     assert all([1, 1, 0, 0, 0] == fixed_range.encode(1))
     assert all([0, 1, 1, 0, 0] == fixed_range.encode(2))
@@ -14,7 +14,7 @@ def test_fixed_range():
 
 def test_cyclic():
     cyclic = numerical.CyclicEncoder(
-        min=1, max=5, length=5, sparsity=0.4
+        min_value=1, max_value=5, length=5, sparsity=0.4
     )
     assert all([1, 1, 0, 0, 0] == cyclic.encode(1))
     assert all([0, 1, 1, 0, 0] == cyclic.encode(2))

@@ -2,83 +2,93 @@
 # -*- coding: utf-8 -*-
 """Module dealing with Neurons."""
 import numpy as np
-from protobrain import event
-from protobrain.util import factory
+from protobrain import computation
+from protobrain import synapses
 
 
-class Neurons:
-    def __init__(self, number, computation):
-        self._number = number
-        self._computation = computation
-        self._outputs = None
-        self._inputs = None
-        self._feedback = None
-        self._inhibitions = None
-        self._emit = event.Event()
+class Neurons(object):
+    MAIN_INPUT = 'main'
 
-    def compute(self):
-        self._outputs = self._computation(self._inputs, self._feedback, self._inhibitions)
-        self.emit(self._outputs)
+    def __init__(self, units, comp=None):
+        self._passthrough = isinstance(units, list)
+        if self._passthrough:
+            self._layers = units
+            # TODO warn if set up seems wrong
+            self._inputs = units[0]._inputs
+            self.output = units[-1].output
+        else:
+            self._inputs = {
+                Neurons.MAIN_INPUT: synapses.Input(
+                    Neurons.MAIN_INPUT,
+                    shape=(units,)
+                )
+            }
+            self.output = synapses.Output(shape=(units,))
 
-    def set_inputs(self, inputs):
-        self._inputs = inputs
-
-    def set_feedback(self, feedback):
-        self._feedback = feedback
-
-    def set_inhibitions(self, inhibitions):
-        self._inhibitions = inhibitions
+        self._computation = comp
 
     @property
-    def outputs(self):
-        return self._outputs
+    def input(self):
+        """Get the main input."""
+        return self.get(Neurons.MAIN_INPUT)
 
-    @property
-    def emit(self):
-        return self._emit
+    @input.setter
+    def input(self, output):
+        """Connect the main input to the given output."""
+        self.set(Neurons.MAIN_INPUT, output)
 
-    def __len__(self):
-        return self._number
+    def get(self, name):
+        """Get an input to these neurons by name."""
+        if name not in self._inputs:
+            raise IndexError(
+                '{0} not set as an input for {1}'.format(
+                    name, repr(self)
+                ))
+        return self._inputs[name]
 
-    def __str__(self):
-        return str(self._outputs.astype(np.int32))
+    def set(self, name, output):
+        """Connect an input to the given output."""
+        if name not in self._inputs:
+            self._inputs[name] = synapses.Input(name, shape=self.input.shape)
 
+        self._inputs[name].connect(output)
 
-class NeuronInput:
-    def __init__(self, values, synaptic_strength):
-        self._values = values
-        self._synaptic_strength = synaptic_strength
-
-    @property
-    def synaptic_strength(self):
-        return self._synaptic_strength
+    def compute(self, computation=None):
+        """Compute the output of this neuron."""
+        computation_function = computation or self._computation
+        if self._passthrough:
+            for layer in self._layers:
+                layer.compute(computation_function)
+        else:
+            self.output.values = computation_function(**self._inputs)
 
     @property
     def values(self):
-        return self._values
+        """The values at the output of these neurons."""
+        return self.output.values
+
+    @property
+    def shape(self):
+        """The shape of the output of these neurons."""
+        return self.output.shape
 
 
-class NeuronsFactory(factory.Factory):
-    """A factory class for Neurons."""
+def FeedForward(layers, input_name='main'):
+    for i, layer in enumerate(layers[:-1]):
+        layers[i + 1].set(input_name, layer)
 
-    def __init__(self, number_factory, computation_factory):
-        """Initialize a Neuron Factory."""
-        self._number_factory = number_factory
-        self._computation_factory = computation_factory
-
-    def create(self):
-        """Create Neurons."""
-        return Neurons(
-            self._number_factory(),
-            self._computation_factory())
+    return Neurons(layers)
 
 
-class SimpleNeuronsFactory(NeuronsFactory):
-    """A simple factory class for Neurons."""
+def FeedBackward(layers, input_name=None):
+    for i, layer in enumerate(layers[:-1]):
+        layer.set(input_name, layers[i + 1])
 
-    def __init__(self, number, computation):
-        """Initialize the factory."""
-        super().__init__(
-            factory.ConstantFactory(number),
-            factory.ConstantFactory(computation)
-        )
+    return Neurons(layers)
+
+
+def LoopBack(layers, input_name=None):
+    for layer in layers:
+        layer.set(input_name, layer)
+
+    return Neurons(layers)

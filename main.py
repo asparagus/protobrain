@@ -1,21 +1,30 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-import time
-from protobrain.proto import experiment_pb2
-from protobrain import scientist
-
+# import time
+# from protobrain.proto import experiment_pb2
+# from protobrain import scientist
+from protobrain import brain
+from protobrain import computation
+from protobrain import neuron
+from protobrain import sensor
+from protobrain.encoders import numerical
 
 if __name__ == '__main__':
-    # TODO(ariel): these should come from stdin
-    exp = experiment_pb2.Experiment()
-    exp.live = False
-    exp.sensor.representation_size = 25
-    exp.cortex.layer.extend([40, 40, 30, 20])
-    exp.iters = 3
+    senz = sensor.Sensor(
+        numerical.CyclicEncoder(
+            min_value=0,
+            max_value=100,
+            length=98,
+            sparsity=0.03
+        ))
 
-    print(exp)
-    #############################
-    sc = scientist.Scientist()
-    res = sc.run(exp)
+    layers = [neuron.Neurons(n) for n in [40, 40, 30, 20]]
 
-    print(res)
+    brain = brain.Brain(
+        sensor=senz,
+        neurons=neuron.FeedForward(layers)
+    )
+
+    for i in range(100):
+        senz.feed(i)
+        brain.compute(computation.StandardComputation(0.5))
