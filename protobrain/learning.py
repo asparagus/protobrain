@@ -1,33 +1,30 @@
-# #!/usr/bin/python
-# # -*- coding: utf-8 -*-
-# import abc
-# import numpy as np
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+import abc
+import numpy as np
 
 
-# class Learning(abc.ABC):
+class Learning(abc.ABC):
 
-#     @abc.abstractmethod
-#     def __call__(self, connections):
-#         raise NotImplementedError()
+    @abc.abstractmethod
+    def __call__(self, connections):
+        raise NotImplementedError()
 
 
-# class HebbianLearning(abc.ABC):
-#     def __init__(self, increase, decrease):
-#         self._increase = increase
-#         self._decrease = decrease
+class HebbianLearning(Learning):
+    def __init__(self, increase=0.05, decrease=0.002):
+        self.increase = increase
+        self.decrease = decrease
 
-#     def __call__(self, connections):
-#         for connection in connections:
-#             m = connection._other_neurons.outputs[..., np.newaxis]
-#             n = connection._neurons.outputs[np.newaxis, ...]
+    def __call__(self, neurons):
+        if neurons.passthrough:
+            for layer in neurons.layers:
+                self(layer)
+            return
 
-#             matches = np.dot(m, n)
-
-#             # Strengthen matching connections
-#             connection._strength += matches * self._increase
-
-#             # Weaken all connections
-#             connection._strength -= self._decrease
-
-#             # Ensure the values remain within valid range
-#             connection._strength = np.clip(connection._strength, 0, 1)
+        output_values = neurons.output.values
+        active_neurons = output_values == 1
+        for input_name, input_unit in neurons.inputs.items():
+            input_unit.synapses -= self.decrease
+            input_unit.synapses[active_neurons,...] += self.increase
+            input_unit.synapses = np.clip(input_unit.synapses, 0, 1)

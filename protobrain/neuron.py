@@ -14,16 +14,16 @@ class Neurons(object):
     MAIN_INPUT = 'main'
 
     def __init__(self, units, computation_function=None):
-        self._passthrough = isinstance(units, (list, tuple, Neurons))
-        if self._passthrough:
-            self._layers = getattr(units, '_layers', units)
-            self._inputs = self._layers[0]._inputs
-            if self._inputs[Neurons.MAIN_INPUT].connected:
+        self.passthrough = isinstance(units, (list, tuple, Neurons))
+        if self.passthrough:
+            self.layers = getattr(units, 'layers', units)
+            self.inputs = self.layers[0].inputs
+            if self.inputs[Neurons.MAIN_INPUT].connected:
                 log.warning(
                     "Creating Neurons with pre-connected input"
                 )
 
-            self.output = self._layers[-1].output
+            self.output = self.layers[-1].output
 
             internal_computations = self.recursive_retrieve_computations()
             if computation_function and any(internal_computations):
@@ -33,7 +33,7 @@ class Neurons(object):
                     computation_function
                 )
         else:
-            self._inputs = {
+            self.inputs = {
                 Neurons.MAIN_INPUT: synapses.Input(
                     Neurons.MAIN_INPUT,
                     shape=(units,)
@@ -45,8 +45,8 @@ class Neurons(object):
 
     def recursive_retrieve_computations(self):
         computations = []
-        if self._passthrough:
-            for layer in self._layers:
+        if self.passthrough:
+            for layer in self.layers:
                 computations.extend(layer.recursive_retrieve_computations())
         else:
             computations.append(self._computation)
@@ -65,30 +65,30 @@ class Neurons(object):
 
     def get(self, name):
         """Get an input to these neurons by name."""
-        if name not in self._inputs:
+        if name not in self.inputs:
             raise IndexError(
                 '{0} not set as an input for {1}'.format(
                     name, repr(self)
                 ))
-        return self._inputs[name]
+        return self.inputs[name]
 
     def set(self, name, output):
         """Connect an input to the given output."""
-        if name not in self._inputs:
-            self._inputs[name] = synapses.Input(name, shape=self.input.shape)
+        if name not in self.inputs:
+            self.inputs[name] = synapses.Input(name, shape=self.input.shape)
 
-        self._inputs[name].connect(output)
+        self.inputs[name].connect(output)
 
     def compute(self, computation_function=None):
         """Compute the output of this neuron."""
         computation_function = computation_function or self._computation
-        if self._passthrough:
-            for layer in self._layers:
+        if self.passthrough:
+            for layer in self.layers:
                 layer.compute(computation_function)
         else:
             if computation_function is None:
                 log.critical("Missing computation function")
-            self.output.values = computation_function(**self._inputs)
+            self.output.values = computation_function(**self.inputs)
 
     @property
     def values(self):

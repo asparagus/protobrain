@@ -16,6 +16,8 @@ class Brain:
     def compute(self, computation_function=None):
         self._neurons.compute(computation_function)
 
+    def learn(self, learning_function=None):
+        learning_function(self._neurons)
     # def snapshot(self, snapshot_to_fill=None):
     #     """Get a snapshot of the protobrain state."""
     #     snap = snapshot_to_fill or snapshot_pb2.Snapshot()

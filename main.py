@@ -5,6 +5,7 @@
 # from protobrain import scientist
 from protobrain import brain
 from protobrain import computation
+from protobrain import learning
 from protobrain import neuron
 from protobrain import sensor
 from protobrain.encoders import numerical
@@ -18,6 +19,8 @@ if __name__ == '__main__':
             sparsity=0.03
         ))
 
+    hebbian_learning = learning.HebbianLearning()
+
     layers = [neuron.Neurons(n) for n in [40, 40, 30, 20]]
 
     brain = brain.Brain(
@@ -27,4 +30,5 @@ if __name__ == '__main__':
 
     for i in range(100):
         senz.feed(i)
-        brain.compute()
+        brain.compute(computation.SparseComputation(5))
+        brain.learn(hebbian_learning)
