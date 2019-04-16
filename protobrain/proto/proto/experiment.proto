@@ -1,0 +1,15 @@
+syntax = "proto2";
+
+import "encoder.proto";
+
+package protobrain;
+
+message Experiment {
+  optional Encoder encoder = 1;
+  optional Cortex cortex = 2;
+  repeated SensorValue input = 3;
+}
+
+message Cortex {
+  repeated int32 layer = 1;
+}

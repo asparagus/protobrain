@@ -1,0 +1,42 @@
+syntax = "proto2";
+
+package protobrain;
+
+message Encoder {
+  enum EncoderType {
+    UNKNOWN = 0;
+    NUMERICAL_SIMPLE = 1;
+    NUMERICAL_CYCLIC = 2;
+  }
+
+  optional EncoderType type = 1;
+  repeated int32 shape = 2;
+
+  extensions 100 to 500;
+}
+
+message SimpleEncoder {
+  extend Encoder {
+    optional SimpleEncoder simple_encoder = 100;
+  }
+
+  optional float min_value = 1;
+  optional float max_value = 2 [default=10];
+}
+
+message CyclicEncoder {
+  extend Encoder {
+    optional CyclicEncoder cyclic_encoder = 101;
+  }
+
+  optional float min_value = 1;
+  optional float max_value = 2 [default=10];
+}
+
+message SensorValue {
+  oneof value {
+    int32 int = 1;
+    float float = 2;
+    string text = 3;
+  }
+}

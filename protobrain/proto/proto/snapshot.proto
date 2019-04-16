@@ -1,11 +1,9 @@
 syntax = "proto2";
 
-package protobrain;
+import "encoder.proto";
+import "sdr.proto";
 
-message SparseDistributedRepresentation {
-  repeated int32 dimensions = 1;
-  repeated int32 on_bits = 2;
-}
+package protobrain;
 
 message History {
   repeated Snapshot snapshot = 1;
@@ -21,6 +19,6 @@ message CorticalSnapshot {
 }
 
 message SensorSnapshot {
-  optional SparseDistributedRepresentation sdr = 1;
-  optional float encodedValue = 2;
+  optional SensorValue value = 1;
+  optional SparseDistributedRepresentation sdr = 2;
 }

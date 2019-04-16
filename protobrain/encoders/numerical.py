@@ -30,8 +30,7 @@ class NumericalEncoder(sensor.Encoder):
         return self._length
 
 
-
-class FixedRangeEncoder(NumericalEncoder):
+class SimpleEncoder(NumericalEncoder):
     def encode(self, value):
         if not (self.min <= value <= self.max):
             raise ValueError('Value outside of the range of the encoder.')
