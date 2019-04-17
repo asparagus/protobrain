@@ -4,6 +4,9 @@
 *.py[cod]
 *$py.class
 
+# Compiled protobuf
+*_pb2.py
+
 # Distribution / packaging
 .Python
 env/

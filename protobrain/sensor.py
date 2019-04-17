@@ -3,8 +3,6 @@
 """Module for handling a sensory layer."""
 import abc
 from protobrain import synapses
-# from protobrain.proto import snapshot_pb2
-# from protobrain.util import sdr
 
 
 class Sensor(object):
@@ -40,12 +38,6 @@ class Sensor(object):
     def shape(self):
         """The shape of this sensor's outputs."""
         return self.output.shape
-
-    # def snapshot(self, snapshot_to_fill):
-    #     """Get a snapshot of the sensor state."""
-    #     snap = snapshot_to_fill or snapshot_pb2.SensorSnapshot()
-    #     sdr.np_to_sdr(self.values, snap.sdr)
-    #     return snap
 
 
 class Encoder(abc.ABC):

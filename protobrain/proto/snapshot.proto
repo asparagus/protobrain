@@ -1,13 +1,9 @@
 syntax = "proto2";
 
-import "encoder.proto";
-import "sdr.proto";
+import "protobrain/proto/encoder.proto";
+import "protobrain/proto/sdr.proto";
 
-package protobrain;
-
-message History {
-  repeated Snapshot snapshot = 1;
-}
+package protobrain.proto;
 
 message Snapshot {
   optional CorticalSnapshot cortex = 1;

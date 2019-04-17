@@ -1,8 +1,8 @@
 syntax = "proto2";
 
-import "encoder.proto";
+import "protobrain/proto/encoder.proto";
 
-package protobrain;
+package protobrain.proto;
 
 message Experiment {
   optional Encoder encoder = 1;

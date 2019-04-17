@@ -1,6 +1,6 @@
 syntax = "proto2";
 
-package protobrain;
+package protobrain.proto;
 
 message SparseDistributedRepresentation {
   repeated int32 shape = 1;

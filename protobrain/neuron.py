@@ -20,7 +20,7 @@ class Neurons(object):
             self.inputs = self.layers[0].inputs
             if self.inputs[Neurons.MAIN_INPUT].connected:
                 log.warning(
-                    "Creating Neurons with pre-connected input"
+                    'Creating Neurons with pre-connected input'
                 )
 
             self.output = self.layers[-1].output
@@ -87,7 +87,7 @@ class Neurons(object):
                 layer.compute(computation_function)
         else:
             if computation_function is None:
-                log.critical("Missing computation function")
+                log.critical('Missing computation function')
             self.output.values = computation_function(**self.inputs)
 
     @property
