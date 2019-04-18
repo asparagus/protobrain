@@ -7,31 +7,48 @@ from protobrain import sensor
 
 
 class NumericalEncoder(sensor.Encoder):
+    """Base encoder for numerical types."""
+
     def __init__(self, min_value, max_value, length, sparsity=0.02):
+        """Initialize the encoder.
+
+        Args:
+            min_value: The minimum value supported by this encoder
+            max_value: The maximum value supported by this encoder
+            length: The length of the encoded representation
+            sparsity: The sparsity of the encoded representation
+        """
         super().__init__(
             default_value=0,
             shape=(length,)
         )
         self.min = min_value
         self.max = max_value
-        self._length = length
-        self._sparsity = sparsity
+        self.length = length
+        self.sparsity = sparsity
 
     @property
     def range(self):
+        """The range of values supported by this encoder."""
         return self.max - self.min
-
-    @property
-    def sparsity(self):
-        return self._sparsity
-
-    @property
-    def length(self):
-        return self._length
 
 
 class SimpleEncoder(NumericalEncoder):
+    """The simplest numerical encoder."""
+
     def encode(self, value):
+        """Encode a value.
+
+        The signal length is determined by the output length and the sparsity.
+        The encoded value contains a band of activations of said length that
+        slide across the representation.
+
+        Args:
+            value: The value to encode
+
+        Returns:
+            The encoded representation of the value
+        """
         if not (self.min <= value <= self.max):
             raise ValueError('Value outside of the range of the encoder.')
 
@@ -46,7 +63,21 @@ class SimpleEncoder(NumericalEncoder):
 
 
 class CyclicEncoder(NumericalEncoder):
+    """A cyclic encoder, similar to the SimpleEncoder, but loops."""
+
     def encode(self, value):
+        """Encode a value.
+
+        The signal length is determined by the output length and the sparsity.
+        The encoded value contains a band of activations of said length that
+        slide across the representation and loop at the end.
+
+        Args:
+            value: The value to encode
+
+        Returns:
+            The encoded representation of the value
+        """
         if not (self.min <= value <= self.max):
             raise ValueError('Value outside of the range of the encoder.')
 

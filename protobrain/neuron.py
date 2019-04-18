@@ -11,9 +11,17 @@ log = logging.getLogger(__name__)
 
 
 class Neurons(object):
+    """Class representing neurons."""
+
     MAIN_INPUT = 'main'
 
     def __init__(self, units, computation_function=None):
+        """Initialize the neurons.
+
+        Args:
+            units: Either a number of internal units or a list of layers
+            computation_function: The computation to use to obtain the outputs
+        """
         self.passthrough = isinstance(units, (list, tuple, Neurons))
         if self.passthrough:
             self.layers = getattr(units, 'layers', units)
@@ -44,6 +52,7 @@ class Neurons(object):
         self._computation = computation_function
 
     def recursive_retrieve_computations(self):
+        """Get the computations used in the sub-layers."""
         computations = []
         if self.passthrough:
             for layer in self.layers:
@@ -102,6 +111,17 @@ class Neurons(object):
 
 
 def FeedForward(layers, input_name='main'):
+    """Connect all the layers in a feed forward fashion.
+
+    Each layer's output will be connected to the next layer's input
+    matching the given name.
+
+    Args:
+        input_name: The input to which to connect
+
+    Returns:
+        A Neurons object containing the layers
+    """
     for i, layer in enumerate(layers[:-1]):
         layers[i + 1].set(input_name, layer)
 
@@ -109,6 +129,17 @@ def FeedForward(layers, input_name='main'):
 
 
 def FeedBackward(layers, input_name=None):
+    """Connect all the layers in a feed backward fashion.
+
+    Each layer's output will be connected to the previous layer's input
+    matching the given name.
+
+    Args:
+        input_name: The input to which to connect
+
+    Returns:
+        A Neurons object containing the layers
+    """
     for i, layer in enumerate(layers[:-1]):
         layer.set(input_name, layers[i + 1])
 
@@ -116,6 +147,17 @@ def FeedBackward(layers, input_name=None):
 
 
 def LoopBack(layers, input_name=None):
+    """Connect all the layers in a loop back fashion.
+
+    Each layer's output will be connected to their own input
+    matching the given name.
+
+    Args:
+        input_name: The input to which to connect
+
+    Returns:
+        A Neurons object containing the layers
+    """
     for layer in layers:
         layer.set(input_name, layer)
 

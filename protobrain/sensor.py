@@ -41,11 +41,30 @@ class Sensor(object):
 
 
 class Encoder(abc.ABC):
+    """Base class for encoders.
+
+    Encoders can take in a value and convert it to a representative binary
+    array suitable for a Sensor.
+    """
 
     def __init__(self, default_value, shape):
+        """Initialize the encoder.
+
+        Args:
+            default_value: The starting value
+            shape: The output shape
+        """
         self.default_value = default_value
         self.shape = shape
 
     @abc.abstractmethod
     def encode(self, value):
+        """Encode the value to a binary representation.
+
+        Args:
+            value: The value to encode
+
+        Returns:
+            The encoded value.
+        """
         raise NotImplementedError()
