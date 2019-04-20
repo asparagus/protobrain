@@ -4,7 +4,7 @@ from protobrain.encoders import numerical
 
 
 def test_fixed_range():
-    fixed_range = numerical.FixedRangeEncoder(
+    fixed_range = numerical.SimpleEncoder(
         min_value=1, max_value=4, length=5, sparsity=0.4
     )
     assert all([1, 1, 0, 0, 0] == fixed_range.encode(1))

@@ -53,7 +53,7 @@ def main():
     _learning = learning.HebbianLearning()
 
     senz = sensor.Sensor(proto_parse.decode_encoder(exp.encoder))
-    brain = brain.Brain(
+    brian = brain.Brain(
         sensor=senz,
         neurons=proto_parse.decode_neurons(exp.cortex)
     )
@@ -62,9 +62,9 @@ def main():
         writer = proto_io.ProtoWriter(output_file)
         for value in proto_parse.decode_input(exp.input):
             senz.feed(value)
-            brain.compute(_computation)
-            brain.learn(_learning)
-            writer.write(proto_parse.encode_brain(brain))
+            brian.compute(_computation)
+            brian.learn(_learning)
+            writer.write(proto_parse.encode_brain(brian))
 
 
 if __name__ == '__main__':
