@@ -82,6 +82,9 @@ class UploadCommand(Command):
         except OSError:
             pass
 
+        self.status('Building protobuf files…')
+        os.system('protoc -I=. --python_out=. protobrain/proto/*.proto')
+
         self.status('Building Source and Wheel (universal) distribution…')
         os.system('{0} setup.py sdist bdist_wheel --universal'.format(sys.executable))
 
