@@ -34,7 +34,7 @@ if __name__ == '__main__':
             input_file.seek(0)
 
             subprocess.run(
-                ['python', 'experiment.py', input_file.name, output_file.name]
+                ['python', 'protobrain/cli/experiment.py', input_file.name, output_file.name]
             )
 
             output_file.seek(0)

@@ -28,7 +28,7 @@ from protobrain.util import proto_io
 from protobrain.util import proto_parse
 
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         'experiment',
@@ -65,3 +65,7 @@ if __name__ == '__main__':
             brain.compute(_computation)
             brain.learn(_learning)
             writer.write(proto_parse.encode_brain(brain))
+
+
+if __name__ == '__main__':
+    main()
