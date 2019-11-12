@@ -1,5 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+import numpy as np
+from protobrain import neuron
 from protobrain.metrics import metric
 
 
@@ -39,15 +41,34 @@ class SpikeDensity(metric.Metric):
         return spike_density
 
     def _aggregate_over_time(self):
-        ...
-        # if isinstance(self._sizes_per_layer, int):
-        #     return (np.sum(self._density_per_step_per_layer) /
-        #             len(self._density_per_step_per_layer))
-        # num_steps = len(self._density_per_step_per_layer)
-        # aggregated_layer_density = None
+        if isinstance(self._sizes_per_layer, int):
+            return (np.sum(self._density_per_step_per_layer) /
+                    len(self._density_per_step_per_layer))
 
-        # for layer_density in self._density_per_step_per_layer:
-        #     ...
+        num_steps = len(self._density_per_step_per_layer)
+        if num_steps == 1:
+            return self._density_per_step_per_layer
+
+        accumulated_layer_density = None
+        for layer_density in self._density_per_step_per_layer:
+            accumulated_layer_density = self._accumulate_partials(
+                accumulated_layer_density, layer_density, num_steps)
+
+        return accumulated_layer_density
+
+    def _accumulate_partials(self, accumulator, layer_density, normalization_factor):
+        if isinstance(layer_density, (int, float)):
+            return layer_density / normalization_factor + (accumulator or 0)
+
+        if not accumulator:
+            accumulator = [None] * len(layer_density)
+
+        for i, sublayer_density in enumerate(layer_density):
+            accumulator[i] = self._accumulate_partials(
+                accumulator[i], sublayer_density, normalization_factor
+            )
+
+        return accumulator
 
     def _aggregate_over_layers(self):
         if isinstance(self._sizes_per_layer, int):
@@ -78,7 +99,9 @@ class SpikeDensity(metric.Metric):
         return layer_density, size
 
     def compute(self):
-        return MetricResults(
+        if not self._sizes_per_layer:
+            raise RuntimeError('No iterations - cannot compute metric')
+        return metric.MetricResults(
             self.name,
             global_result=self._aggregate(),
             per_layer_result=self._aggregate_over_time(),

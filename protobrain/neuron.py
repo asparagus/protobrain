@@ -22,6 +22,9 @@ class Neurons(object):
             units: Either a number of internal units or a list of layers
             computation: The computation function to use to obtain the outputs
         """
+        if isinstance(shape, int):
+            shape = (shape,)
+
         self.inputs = {
             self.MAIN_INPUT: synapses.Input(self.MAIN_INPUT, shape=shape)
         }

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from protobrain.benchmark import metric
+from protobrain.metrics import metric
 
 
 class Benchmark(object):

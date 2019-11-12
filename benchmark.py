@@ -4,12 +4,12 @@ from protobrain import sensor
 from protobrain import computation
 from protobrain.encoders import numerical
 from protobrain.metrics import benchmark
-from protobrain.metrics import metric
+from protobrain.metrics import spike_density
 
 
 if __name__ == '__main__':
     metrics = [
-        metric.SpikeDensity(),
+        spike_density.SpikeDensity(),
     ]
 
     sens = sensor.Sensor(numerical.CyclicEncoder(0, 100, 1024))

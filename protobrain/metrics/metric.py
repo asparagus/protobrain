@@ -1,11 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 import abc
-import functools
-import operator
-
-import numpy as np
-
 from protobrain import neuron
 
 
@@ -54,18 +49,5 @@ class Metric(abc.ABC):
 
     @property
     def name(self):
+        """Gets the name of the metric."""
         return self._name
-
-
-class SpikeCount(Metric):
-    """How many times each neuron spiked during the experiment."""
-
-    def __init__(self):
-        """Initialize the metric."""
-        ...
-
-    def next(self, neurons):
-        ...
-
-    def compute(self):
-        ...
