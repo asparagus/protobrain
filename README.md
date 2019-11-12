@@ -4,7 +4,7 @@ This is an experimental project for machine learning techniques.
 Loosely based on Hierarchical Temporal Memory by [Numenta](http://numenta.org/).
 
 ## Building the protobuf files
-To use this project you'll need to build the protobuf files.
+Some functionality of this project depends on protobuf files. To build them, use the following command:
 ```
 protoc -I=. --python_out=. protobrain/proto/*.proto
 ```

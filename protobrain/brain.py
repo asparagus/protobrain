@@ -13,9 +13,9 @@ class Brain:
 
         neurons.input = sensor
 
-    def compute(self, computation_function=None):
+    def compute(self):
         """Compute the next brain state."""
-        self.neurons.compute(computation_function)
+        return self.neurons.compute()
 
     def learn(self, learning_function=None):
         """Learn and adapt connections."""

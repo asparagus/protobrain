@@ -52,7 +52,8 @@ class SparseComputation(Computation):
         """Initialize the computation.
 
         Args:
-            n: The number of neurons to have active in the end
+            n: The number of neurons to activate in each timestep. If fractional,
+              will activate this fraction of neurons.
         """
         self.n = n
 
@@ -69,7 +70,12 @@ class SparseComputation(Computation):
             Binary values from the computation
         """
         activations = np.dot(main.synapses, main.values)
-        top_indices = activations.argsort()[-self.n:]
+
+        n = (int(np.ceil(self.n * len(activations)))
+             if isinstance(self.n, float)
+             else self.n)
+
+        top_indices = activations.argsort()[-n:]
 
         result = np.zeros(len(activations))
         result[top_indices] = 1
