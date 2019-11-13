@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-Entry point for running experiments.
+Entry point for running experiments through the protobuf interface.
 
 Creates the setup defined by the experiment protobuf instance that is received
 and then proceeds to run the experiment by feeding the inputs to the sensor.

@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+"""Module for implementation of the SpikeDensity metric."""
 import numpy as np
 from protobrain import neuron
 from protobrain.metrics import metric
@@ -15,6 +16,11 @@ class SpikeDensity(metric.Metric):
         self._sizes_per_layer = None
 
     def next(self, neurons):
+        """Record the next state for the metric computation.
+
+        Args:
+            neurons: Brain state to record
+        """
         if not self._sizes_per_layer:
             self._sizes_per_layer = self._size_per_layer(neurons)
 
@@ -98,6 +104,7 @@ class SpikeDensity(metric.Metric):
         return layer_density, size
 
     def compute(self):
+        """Compute the metric based on the saved state."""
         if not self._sizes_per_layer:
             raise RuntimeError('No iterations - cannot compute metric')
 

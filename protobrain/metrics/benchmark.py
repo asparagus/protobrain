@@ -1,13 +1,33 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+"""Module for implementation of a benchmark to evaluate architectures."""
 from protobrain.metrics import metric
 
 
 class Benchmark(object):
+    """Benchmark objects evaluate metrics on given architectures."""
+
     def __init__(self, metrics):
+        """Initialize the benchmark with the given metrics.
+
+        Args:
+            metrics: List of metric objects to use
+        """
         self.metrics = metrics
 
     def run(self, brains, inputs, verbose=False):
+        """Run the benchmark on the given brains with the given inputs.
+
+        Args:
+            brains: Brain architectures to evaluate
+            inputs: Input sequence to use
+            verbose: Whether to log progress as evaluations are run
+
+        Returns:
+            A list with results for each brain architecture given.
+            Results consist of {'metric_name': protobrain.metric.MetricResults}
+            entries for each metric.
+        """
         metric_results = []
         for i, brain in enumerate(brains):
             brain_results = {}
