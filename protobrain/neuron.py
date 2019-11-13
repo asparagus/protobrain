@@ -15,12 +15,13 @@ class Neurons(object):
 
     MAIN_INPUT = 'main'
 
-    def __init__(self, shape, computation):
+    def __init__(self, shape, computation, learning=None):
         """Initialize the neurons.
 
         Args:
             units: Either a number of internal units or a list of layers
             computation: The computation function to use to obtain the outputs
+            learning: Optional - the function to use for learning
         """
         if isinstance(shape, int):
             shape = (shape,)
@@ -30,11 +31,17 @@ class Neurons(object):
         }
         self.output = synapses.Output(shape=shape)
         self.computation = computation
+        self.learning = learning
 
     def compute(self):
         """Compute the output of this neuron."""
         self.output.values = self.computation(**self.inputs)
         return self.values
+
+    def learn(self):
+        """Adjust the synapses to learn."""
+        if self.learning:
+            self.learning(self)
 
     @property
     def input(self):
@@ -83,6 +90,11 @@ class LayeredNeurons(Neurons):
             log.warning(
                 'Creating layers with pre-connected input'
             )
+
+    def learn(self):
+        """Adjust the synapses to learn."""
+        for layer in self.layers:
+            layer.learn()
 
     def compute(self):
         """Compute the output of these layers."""

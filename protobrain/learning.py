@@ -3,6 +3,7 @@
 """A module for defining different kinds of neuronal learning."""
 import abc
 import numpy as np
+from protobrain import neuron
 
 
 class Learning(abc.ABC):
@@ -19,7 +20,7 @@ class Learning(abc.ABC):
 
 
 class HebbianLearning(Learning):
-    """A kind of learning that favors the connection of co-occurrenct neurons.
+    """A kind of learning that favors the connection of co-occurrent neurons.
 
     'Neurons that fire together, wire together.'
     'Neurons that fire apart, wire apart'
@@ -44,7 +45,7 @@ class HebbianLearning(Learning):
         Args:
             neurons: The neurons to update
         """
-        if neurons.passthrough:
+        if isinstance(neurons, neuron.LayeredNeurons):
             for layer in neurons.layers:
                 self(layer)
             return

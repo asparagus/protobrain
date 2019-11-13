@@ -17,6 +17,6 @@ class Brain:
         """Compute the next brain state."""
         return self.neurons.compute()
 
-    def learn(self, learning_function=None):
+    def learn(self):
         """Learn and adapt connections."""
-        learning_function(self.neurons)
+        self.neurons.learn()

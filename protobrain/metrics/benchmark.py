@@ -15,12 +15,13 @@ class Benchmark(object):
         """
         self.metrics = metrics
 
-    def run(self, brains, inputs, verbose=False):
+    def run(self, brains, inputs, learning=True, verbose=False):
         """Run the benchmark on the given brains with the given inputs.
 
         Args:
             brains: Brain architectures to evaluate
             inputs: Input sequence to use
+            learning: Whether to use learning
             verbose: Whether to log progress as evaluations are run
 
         Returns:
@@ -34,6 +35,9 @@ class Benchmark(object):
             for inp in inputs:
                 brain.sensor.feed(inp)
                 brain.compute()
+                if learning:
+                    brain.learn()
+
                 for metric in self.metrics:
                     metric.next(brain.neurons)
 
