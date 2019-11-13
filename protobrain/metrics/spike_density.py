@@ -81,8 +81,7 @@ class SpikeDensity(metric.Metric):
 
         return per_step_density
 
-    def _aggregate(self):
-        layer_aggregation = self._aggregate_over_layers()
+    def _aggregate_global(self, layer_aggregation):
         return np.sum(layer_aggregation) / len(layer_aggregation)
 
     def _average_density(self, layer_density, size):
@@ -101,10 +100,12 @@ class SpikeDensity(metric.Metric):
     def compute(self):
         if not self._sizes_per_layer:
             raise RuntimeError('No iterations - cannot compute metric')
+
+        per_step_result = self._aggregate_over_layers()
         return metric.MetricResults(
             self.name,
-            global_result=self._aggregate(),
+            global_result=self._aggregate_global(per_step_result),
             per_layer_result=self._aggregate_over_time(),
-            per_step_result=self._aggregate_over_layers(),
+            per_step_result=per_step_result,
             per_layer_per_step_result=self._density_per_step_per_layer,
         )
