@@ -12,6 +12,9 @@ class SpikeDensity(metric.Metric):
     def __init__(self):
         """Initialize the metric."""
         super().__init__('spike_density')
+
+    def reset(self):
+        """Reset all accumulators."""
         self._density_per_step_per_layer = []
         self._sizes_per_layer = None
 

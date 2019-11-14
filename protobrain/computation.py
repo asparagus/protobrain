@@ -41,7 +41,7 @@ class StandardComputation(Computation):
         Returns:
             Binary values from the computation
         """
-        activations = np.dot(main.synapses, main.values)
+        activations = np.dot(main.values, main.synapses)
         return activations > self.threshold
 
 
@@ -69,7 +69,7 @@ class SparseComputation(Computation):
         Returns:
             Binary values from the computation
         """
-        activations = np.dot(main.synapses, main.values)
+        activations = np.dot(main.values, main.synapses)
 
         n = (int(np.ceil(self.n * len(activations)))
              if isinstance(self.n, float)
@@ -80,3 +80,5 @@ class SparseComputation(Computation):
         result = np.zeros(len(activations))
         result[top_indices] = 1
         return result
+
+

@@ -50,8 +50,17 @@ class Metric(abc.ABC):
     """A class to represent a metric for an experiment."""
 
     def __init__(self, name):
-        """Initialize the metric with a name."""
+        """Initialize the metric with a name.
+
+        Calls reset to initialize any accumulators.
+        """
         self._name = name
+        self.reset()
+
+    @abc.abstractmethod
+    def reset(self):
+        """Reset all accumulators."""
+        raise NotImplementedError()
 
     @abc.abstractmethod
     def compute(self):

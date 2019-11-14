@@ -33,7 +33,7 @@ class Input(object):
         return self._connected_output is not None
 
     # TODO: Allow providing the function for synapse creation
-    def connect(self, output):
+    def connect(self, output, synapse_function=None):
         """Connect this input to an output.
 
         Creates the synapses to match the output's dimensions.
@@ -45,7 +45,10 @@ class Input(object):
             log.warning('Skipping reconnection of input-output pair')
             return  # Skip
 
-        self.synapses = Input._create_synapses(self.shape, output.shape)
+        if synapse_function is None:
+            synapse_function = Input._create_synapses
+
+        self.synapses = synapse_function(output.shape, self.shape)
         self._connected_output = output
 
     @property
@@ -58,18 +61,18 @@ class Input(object):
         return self._connected_output.values
 
     @classmethod
-    def _create_synapses(cls, input_shape, output_shape, symmetric=False):
+    def _create_synapses(cls, output_shape, input_shape, symmetric=False):
         """Create the synapses between an input and an output.
 
         Args:
-            input_shape: The shape of the input
             output_shape: The shape of the output
+            input_shape: The shape of the input
             symmetric: Whether to enforce symmetric weights
 
         Returns:
             A numpy tensor with the right shape and random weights
         """
-        shape = input_shape + output_shape
+        shape = output_shape + input_shape
         strength = np.random.uniform(0, 1, shape)
 
         return (

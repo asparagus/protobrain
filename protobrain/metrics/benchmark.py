@@ -31,6 +31,9 @@ class Benchmark(object):
         """
         metric_results = []
         for i, brain in enumerate(brains):
+            for metric in self.metrics:
+                metric.reset()
+
             brain_results = {}
             for inp in inputs:
                 brain.sensor.feed(inp)

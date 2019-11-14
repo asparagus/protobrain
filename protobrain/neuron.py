@@ -4,6 +4,7 @@
 import numpy as np
 import logging
 from protobrain import computation
+from protobrain import learning
 from protobrain import synapses
 
 
@@ -15,12 +16,12 @@ class Neurons(object):
 
     MAIN_INPUT = 'main'
 
-    def __init__(self, shape, computation, learning=None):
+    def __init__(self, shape, computation=None, learning=None):
         """Initialize the neurons.
 
         Args:
             units: Either a number of internal units or a list of layers
-            computation: The computation function to use to obtain the outputs
+            computation: Optional - the computation function to use to obtain the outputs
             learning: Optional - the function to use for learning
         """
         if isinstance(shape, int):
@@ -35,6 +36,8 @@ class Neurons(object):
 
     def compute(self):
         """Compute the output of this neuron."""
+        if not self.computation:
+            raise ValueError('Computation function not set for %s!' % self)
         self.output.values = self.computation(**self.inputs)
         return self.values
 
@@ -54,7 +57,14 @@ class Neurons(object):
         self.set(Neurons.MAIN_INPUT, output)
 
     def get(self, name):
-        """Get an input to these neurons by name."""
+        """Get an input to these neurons by name.
+
+        Args:
+            name: The name of the input to retrieve
+
+        Returns:
+            The input that goes by that name.
+        """
         if name not in self.inputs:
             raise IndexError(
                 '{0} not set as an input for {1}'.format(
@@ -62,10 +72,17 @@ class Neurons(object):
                 ))
         return self.inputs[name]
 
-    def set(self, name, output):
-        """Connect an input to the given output."""
+    def set(self, name, output, synapse_function=None):
+        """Connect an input to the given output.
+
+        Args:
+            name: The name of the input
+            output: The output to connect this input to
+            synapse_function: Optional - the function to use to generate
+                the synapses
+        """
         self.inputs[name] = synapses.Input(name, shape=self.output.shape)
-        self.inputs[name].connect(output)
+        self.inputs[name].connect(output, synapse_function)
 
     @property
     def values(self):
@@ -102,8 +119,32 @@ class LayeredNeurons(Neurons):
             layer.compute()
         return self.values
 
+    @property
+    def computation(self):
+        return [layer.computation for layer in self.layers]
 
-def FeedForward(layers, input_name='main'):
+    @computation.setter
+    def computation(self, function):
+        if function is None or isinstance(function, computation.Computation):
+            function = [function] * len(self.layers)
+
+        for i, layer in enumerate(self.layers):
+            layer.computation = function[i]
+
+    @property
+    def learning(self):
+        return [layer.learning for layer in self.layers]
+
+    @learning.setter
+    def learning(self, function):
+        if function is None or isinstance(function, learning.Learning):
+            function = [function] * len(self.layers)
+
+        for i, layer in enumerate(self.layers):
+            layer.learning = function[i]
+
+
+def FeedForward(layers, input_name='main', synapse_function=None):
     """Connect all the layers in a feed forward fashion.
 
     Each layer's output will be connected to the next layer's input
@@ -111,6 +152,8 @@ def FeedForward(layers, input_name='main'):
 
     Args:
         input_name: The input to which to connect
+        synapse_function: Optional - the function to use to generate
+            the synapses
 
     Returns:
         A Neurons object containing the layers
@@ -121,7 +164,7 @@ def FeedForward(layers, input_name='main'):
     return LayeredNeurons(layers)
 
 
-def FeedBackward(layers, input_name=None):
+def FeedBackward(layers, input_name=None, synapse_function=None):
     """Connect all the layers in a feed backward fashion.
 
     Each layer's output will be connected to the previous layer's input
@@ -129,7 +172,8 @@ def FeedBackward(layers, input_name=None):
 
     Args:
         input_name: The input to which to connect
-
+        synapse_function: Optional - the function to use to generate
+            the synapses
     Returns:
         A Neurons object containing the layers
     """
@@ -139,7 +183,7 @@ def FeedBackward(layers, input_name=None):
     return LayeredNeurons(layers)
 
 
-def LoopBack(layers, input_name=None):
+def LoopBack(layers, input_name=None, synapse_function=None):
     """Connect all the layers in a loop back fashion.
 
     Each layer's output will be connected to their own input
@@ -147,6 +191,8 @@ def LoopBack(layers, input_name=None):
 
     Args:
         input_name: The input to which to connect
+        synapse_function: Optional - the function to use to generate
+            the synapses
 
     Returns:
         A Neurons object containing the layers

@@ -12,6 +12,9 @@ class SpikeCount(metric.Metric):
     def __init__(self):
         """Initialize the metric."""
         super().__init__('spike_count')
+
+    def reset(self):
+        """Reset all accumulators."""
         self._accumulator = None
 
     def next(self, neurons):

@@ -50,9 +50,16 @@ class HebbianLearning(Learning):
                 self(layer)
             return
 
-        output_values = neurons.output.values
-        active_neurons = output_values == 1
+        active_neurons = np.array(neurons.output.values) == 1
         for input_name, input_unit in neurons.inputs.items():
-            input_unit.synapses -= self.decrease
-            input_unit.synapses[active_neurons,...] += self.increase
+            active_inputs = np.array(input_unit.values) == 1
+            zeros = input_unit.synapses == 0
+            input_unit.synapses[
+                np.ix_(active_inputs, ~active_neurons)] -= self.decrease
+            input_unit.synapses[
+                np.ix_(~active_inputs, active_neurons)] -= self.decrease
+            input_unit.synapses[
+                np.ix_(active_inputs, active_neurons)] += self.increase
+
+            input_unit.synapses[zeros] = 0
             input_unit.synapses = np.clip(input_unit.synapses, 0, 1)
