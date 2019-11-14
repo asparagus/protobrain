@@ -9,9 +9,11 @@ from protobrain import synapses
 def shape():
     return 10
 
+
 @pytest.fixture(scope='module')
 def expected_output(shape):
     return np.random.rand(shape) < 0.5
+
 
 def test_merge_output():
     out1 = synapses.Output(5)
@@ -21,11 +23,13 @@ def test_merge_output():
 
     assert outm.shape == (13,)
 
+
 def test_slice_output():
     out1 = synapses.Output(5)
     outs = out1[3:]
 
     assert outs.shape == (2,)
+
 
 def test_slice_output_2d():
     out1 = synapses.Output((10, 5))
@@ -33,11 +37,13 @@ def test_slice_output_2d():
 
     assert outs.shape == (5, 2)
 
+
 def test_output_validates_values():
     out = synapses.Output(10)
 
     with pytest.raises(ValueError):
         out.values = np.zeros(11)
+
 
 def test_connect_input_output(shape, expected_output):
     inp = synapses.Input('', shape)
@@ -46,6 +52,7 @@ def test_connect_input_output(shape, expected_output):
     inp.connect(out)
     out.values = expected_output
     assert all(inp.values == expected_output)
+
 
 def test_connect_input_merged_output():
     inp = synapses.Input('', 10)
@@ -60,6 +67,7 @@ def test_connect_input_merged_output():
     assert all(inp.values == [1, 1, 1, 1, 1,
                               2, 2, 2, 2, 2])
 
+
 def test_connect_input_sliced_output(shape, expected_output):
     inp = synapses.Input('', 2)
     out = synapses.Output(shape)
@@ -69,6 +77,7 @@ def test_connect_input_sliced_output(shape, expected_output):
 
     out.values = expected_output
     assert all(inp.values == expected_output[-2:])
+
 
 def test_connect_2d():
     shape = (3, 4)

@@ -10,10 +10,12 @@ from protobrain.metrics import spike_density
 def neurons():
     return neuron.Neurons(4, None)
 
+
 @pytest.fixture(scope='function')
 def layers():
     return neuron.FeedForward([neuron.Neurons(i, None)
                                for i in (4, 4, 4, 4)])
+
 
 @pytest.fixture(scope='function')
 def non_uniform_layers(layers, neurons):
@@ -22,11 +24,13 @@ def non_uniform_layers(layers, neurons):
         neurons,
     ])
 
+
 def test_no_timesteps(neurons):
     metric = spike_density.SpikeDensity()
 
     with pytest.raises(RuntimeError):
         result = metric.compute()
+
 
 def test_constant_density_neurons(neurons):
     metric = spike_density.SpikeDensity()
@@ -41,6 +45,7 @@ def test_constant_density_neurons(neurons):
     assert result.per_layer_result == 0.25
     assert result.per_step_result == [0.25, 0.25]
     assert result.per_layer_per_step_result == [0.25, 0.25]
+
 
 def test_constant_density_layers(layers):
     metric = spike_density.SpikeDensity()
@@ -58,6 +63,7 @@ def test_constant_density_layers(layers):
     assert result.per_step_result == [0.25, 0.25]
     assert result.per_layer_per_step_result == [(0.25, 0.25, 0.25, 0.25),
                                                 (0.25, 0.25, 0.25, 0.25)]
+
 
 def test_constant_non_uniform_layers(non_uniform_layers):
     metric = spike_density.SpikeDensity()
@@ -79,6 +85,7 @@ def test_constant_non_uniform_layers(non_uniform_layers):
         ((0.25, 0.25, 0.25, 0.25), 0.25),
         ((0.25, 0.25, 0.25, 0.25), 0.25)]
 
+
 def test_changing_density_neurons(neurons):
     metric = spike_density.SpikeDensity()
 
@@ -94,6 +101,7 @@ def test_changing_density_neurons(neurons):
     assert result.per_layer_result == 0.375
     assert result.per_step_result == [0.25, 0.50]
     assert result.per_layer_per_step_result == [0.25, 0.50]
+
 
 def test_changing_density_layers(layers):
     metric = spike_density.SpikeDensity()
@@ -113,6 +121,7 @@ def test_changing_density_layers(layers):
     assert result.per_step_result == [0.25, 0.50]
     assert result.per_layer_per_step_result == [(0.25, 0.25, 0.25, 0.25),
                                                 (0.50, 0.50, 0.50, 0.50)]
+
 
 def test_changing_density_non_uniform_layers(non_uniform_layers):
     metric = spike_density.SpikeDensity()

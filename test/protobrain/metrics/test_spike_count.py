@@ -10,10 +10,12 @@ from protobrain.metrics import spike_count
 def neurons():
     return neuron.Neurons(4, None)
 
+
 @pytest.fixture(scope='function')
 def layers():
     return neuron.FeedForward([neuron.Neurons(i, None)
                                for i in (4, 4, 4, 4)])
+
 
 @pytest.fixture(scope='function')
 def non_uniform_layers(layers, neurons):
@@ -22,11 +24,13 @@ def non_uniform_layers(layers, neurons):
         neurons,
     ])
 
+
 def test_no_timesteps(neurons):
     metric = spike_count.SpikeCount()
 
     with pytest.raises(RuntimeError):
         result = metric.compute()
+
 
 def test_constant_density_neurons(neurons):
     metric = spike_count.SpikeCount()
@@ -39,6 +43,7 @@ def test_constant_density_neurons(neurons):
     assert result.metric_name == 'spike_count'
     assert result.global_result == {0: 3, 2: 1}
     assert result.per_layer_result == {0: 3, 2: 1}
+
 
 def test_constant_density_layers(layers):
     metric = spike_count.SpikeCount()
@@ -56,6 +61,7 @@ def test_constant_density_layers(layers):
                                        {0: 3, 2: 1},
                                        {0: 3, 2: 1},
                                        {0: 3, 2: 1}]
+
 
 def test_constant_non_uniform_layers(non_uniform_layers):
     metric = spike_count.SpikeCount()
@@ -77,6 +83,7 @@ def test_constant_non_uniform_layers(non_uniform_layers):
          {0: 3, 2: 1},
          {0: 3, 2: 1}], {0: 3, 2: 1}]
 
+
 def test_changing_density_neurons(neurons):
     metric = spike_count.SpikeCount()
 
@@ -90,6 +97,7 @@ def test_changing_density_neurons(neurons):
     assert result.metric_name == 'spike_count'
     assert result.global_result == {0: 2, 1: 1, 2: 1}
     assert result.per_layer_result == {0: 2, 1: 1, 2: 1}
+
 
 def test_changing_density_layers(layers):
     metric = spike_count.SpikeCount()
@@ -109,6 +117,7 @@ def test_changing_density_layers(layers):
                                        {0: 2, 1: 1, 2: 1},
                                        {0: 2, 1: 1, 2: 1},
                                        {0: 2, 1: 1, 2: 1}]
+
 
 def test_changing_density_non_uniform_layers(non_uniform_layers):
     metric = spike_count.SpikeCount()

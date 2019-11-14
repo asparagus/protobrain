@@ -12,6 +12,7 @@ def test_fixed_range():
     assert all([0, 0, 1, 1, 0] == fixed_range.encode(3))
     assert all([0, 0, 0, 1, 1] == fixed_range.encode(4))
 
+
 def test_cyclic():
     cyclic = numerical.CyclicEncoder(
         min_value=1, max_value=5, length=5, sparsity=0.4
