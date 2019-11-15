@@ -49,6 +49,10 @@ There are three steps to building any model:
 
     The only currently available learning function is `learning.HebbianLearning`.
 
+    ```python
+    learn = learning.HebbianLearning(increase=0.005, decrease=0.001)
+    ```
+
 4. Define a sensor object that feeds inputs into the brain.
     ```python
     encoder = numerical.CyclicEncoder(min_value, max_value, encoding_length)
