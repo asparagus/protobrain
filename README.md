@@ -3,7 +3,7 @@ This is an experimental project for biologically-inspired machine learning techn
 
 Loosely based on Hierarchical Temporal Memory by [Numenta](http://numenta.org/).
 
-## Use
+## Usage
 The purpose of this library is to enable quick experimentation with different computation and learning models.
 
 There are three steps to building any model:
@@ -68,7 +68,7 @@ There are three steps to building any model:
     brain_ = brain.Brain(neurons, sensor_, computation=computation, learning=learning)
     ```
 
-Once you've built a model, you want to run a benchmark to verify that it's doing what it's supposed to, and compare against different setups.
+Once you've built a model, you want to run a benchmark to verify that it's doing what it's supposed to, and compare against different setups. Read more about benchmarks and metrics [here](protobrain/metrics).
 
 An example of this can be seen in the [`benchmark.py`](benchmark.py) script.
 
