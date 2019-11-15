@@ -32,7 +32,6 @@ class Input(object):
         """Whether the input is connected to an output."""
         return self._connected_output is not None
 
-    # TODO: Allow providing the function for synapse creation
     def connect(self, output, synapse_function=None):
         """Connect this input to an output.
 

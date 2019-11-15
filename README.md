@@ -54,6 +54,9 @@ There are three steps to building any model:
     ```
 
 4. Define a sensor object that feeds inputs into the brain.
+
+    The inputs are transformed from a raw value into a binary representation by the defined [encoder](protobrain/encoders).
+
     ```python
     encoder = numerical.CyclicEncoder(min_value, max_value, encoding_length)
     sensor_ = sensor.Sensor(encoder=encoder)
