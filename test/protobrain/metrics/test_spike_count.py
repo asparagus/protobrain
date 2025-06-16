@@ -1,28 +1,30 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+"""Tests for Spike Count metric."""
+
 import pytest
 import numpy as np
+
 from protobrain import neuron
 from protobrain.metrics import spike_count
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def neurons():
     return neuron.Neurons(4, None)
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def layers():
-    return neuron.FeedForward([neuron.Neurons(i, None)
-                               for i in (4, 4, 4, 4)])
+    return neuron.FeedForward([neuron.Neurons(i, None) for i in (4, 4, 4, 4)])
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def non_uniform_layers(layers, neurons):
-    return neuron.FeedForward([
-        layers,
-        neurons,
-    ])
+    return neuron.FeedForward(
+        [
+            layers,
+            neurons,
+        ]
+    )
 
 
 def test_no_timesteps(neurons):
@@ -40,7 +42,7 @@ def test_constant_density_neurons(neurons):
     metric.next(neurons)
 
     result = metric.compute()
-    assert result.metric_name == 'spike_count'
+    assert result.metric_name == "spike_count"
     assert result.global_result == {0: 3, 2: 1}
     assert result.per_layer_result == {0: 3, 2: 1}
 
@@ -55,12 +57,14 @@ def test_constant_density_layers(layers):
     metric.next(layers)
 
     result = metric.compute()
-    assert result.metric_name == 'spike_count'
+    assert result.metric_name == "spike_count"
     assert result.global_result == {0: 12, 2: 4}
-    assert result.per_layer_result == [{0: 3, 2: 1},
-                                       {0: 3, 2: 1},
-                                       {0: 3, 2: 1},
-                                       {0: 3, 2: 1}]
+    assert result.per_layer_result == [
+        {0: 3, 2: 1},
+        {0: 3, 2: 1},
+        {0: 3, 2: 1},
+        {0: 3, 2: 1},
+    ]
 
 
 def test_constant_non_uniform_layers(non_uniform_layers):
@@ -75,13 +79,12 @@ def test_constant_non_uniform_layers(non_uniform_layers):
     metric.next(non_uniform_layers)
 
     result = metric.compute()
-    assert result.metric_name == 'spike_count'
+    assert result.metric_name == "spike_count"
     assert result.global_result == {0: 15, 2: 5}
     assert result.per_layer_result == [
-        [{0: 3, 2: 1},
-         {0: 3, 2: 1},
-         {0: 3, 2: 1},
-         {0: 3, 2: 1}], {0: 3, 2: 1}]
+        [{0: 3, 2: 1}, {0: 3, 2: 1}, {0: 3, 2: 1}, {0: 3, 2: 1}],
+        {0: 3, 2: 1},
+    ]
 
 
 def test_changing_density_neurons(neurons):
@@ -94,7 +97,7 @@ def test_changing_density_neurons(neurons):
     metric.next(neurons)
 
     result = metric.compute()
-    assert result.metric_name == 'spike_count'
+    assert result.metric_name == "spike_count"
     assert result.global_result == {0: 2, 1: 1, 2: 1}
     assert result.per_layer_result == {0: 2, 1: 1, 2: 1}
 
@@ -111,12 +114,14 @@ def test_changing_density_layers(layers):
     metric.next(layers)
 
     result = metric.compute()
-    assert result.metric_name == 'spike_count'
+    assert result.metric_name == "spike_count"
     assert result.global_result == {0: 8, 1: 4, 2: 4}
-    assert result.per_layer_result == [{0: 2, 1: 1, 2: 1},
-                                       {0: 2, 1: 1, 2: 1},
-                                       {0: 2, 1: 1, 2: 1},
-                                       {0: 2, 1: 1, 2: 1}]
+    assert result.per_layer_result == [
+        {0: 2, 1: 1, 2: 1},
+        {0: 2, 1: 1, 2: 1},
+        {0: 2, 1: 1, 2: 1},
+        {0: 2, 1: 1, 2: 1},
+    ]
 
 
 def test_changing_density_non_uniform_layers(non_uniform_layers):
@@ -135,10 +140,14 @@ def test_changing_density_non_uniform_layers(non_uniform_layers):
     metric.next(non_uniform_layers)
 
     result = metric.compute()
-    assert result.metric_name == 'spike_count'
+    assert result.metric_name == "spike_count"
     assert result.global_result == {0: 9, 1: 5, 2: 6}
     assert result.per_layer_result == [
-        [{0: 2, 1: 1, 2: 1},
-         {0: 2, 1: 1, 2: 1},
-         {0: 2, 1: 1, 2: 1},
-         {0: 2, 1: 1, 2: 1}], {0: 1, 1: 1, 2: 2}]
+        [
+            {0: 2, 1: 1, 2: 1},
+            {0: 2, 1: 1, 2: 1},
+            {0: 2, 1: 1, 2: 1},
+            {0: 2, 1: 1, 2: 1},
+        ],
+        {0: 1, 1: 1, 2: 2},
+    ]

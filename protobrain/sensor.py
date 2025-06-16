@@ -1,11 +1,11 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 """Module for handling a sensory layer."""
+
 import abc
+
 from protobrain import synapses
 
 
-class Sensor(object):
+class Sensor:
     """A class for handling input data."""
 
     def __init__(self, encoder):

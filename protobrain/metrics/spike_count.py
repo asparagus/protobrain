@@ -1,7 +1,7 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 """Module for implementation of the SpikeCount metric."""
+
 import numpy as np
+
 from protobrain import neuron
 from protobrain.metrics import metric
 
@@ -11,7 +11,7 @@ class SpikeCount(metric.Metric):
 
     def __init__(self):
         """Initialize the metric."""
-        super().__init__('spike_count')
+        super().__init__("spike_count")
 
     def reset(self):
         """Reset all accumulators."""
@@ -28,15 +28,14 @@ class SpikeCount(metric.Metric):
     def _accumulate_partials(self, accumulator, neurons):
         if not isinstance(neurons, neuron.LayeredNeurons):
             return np.array(
-                neurons.output.values +
-                (accumulator if accumulator is not None else 0))
+                neurons.output.values + (accumulator if accumulator is not None else 0)
+            )
 
         if not accumulator:
             accumulator = [None] * len(neurons.layers)
 
         for i, sublayers in enumerate(neurons.layers):
-            accumulator[i] = self._accumulate_partials(
-                accumulator[i], sublayers)
+            accumulator[i] = self._accumulate_partials(accumulator[i], sublayers)
 
         return accumulator
 
@@ -72,7 +71,7 @@ class SpikeCount(metric.Metric):
     def compute(self):
         """Compute the metric based on the saved state."""
         if self._accumulator is None:
-            raise RuntimeError('No iterations - cannot compute metric')
+            raise RuntimeError("No iterations - cannot compute metric")
         counts = self._count(self._accumulator)
         return metric.MetricResults(
             self.name,

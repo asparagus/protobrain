@@ -1,8 +1,8 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 """Module for handling neuron connections."""
-import numpy as np
+
 import logging
+
+import numpy as np
 
 
 log = logging.getLogger(__name__)
@@ -41,7 +41,7 @@ class Input(object):
             output: The output to connect to
         """
         if self._connected_output is output:
-            log.warning('Skipping reconnection of input-output pair')
+            log.warning("Skipping reconnection of input-output pair")
             return  # Skip
 
         if synapse_function is None:
@@ -56,7 +56,7 @@ class Input(object):
 
         These are taken from the connected output."""
         if not self._connected_output:
-            raise IndexError('No input set for {1}'.format(repr(self)))
+            raise IndexError("No input set for {1}".format(repr(self)))
         return self._connected_output.values
 
     @classmethod
@@ -74,11 +74,7 @@ class Input(object):
         shape = output_shape + input_shape
         strength = np.random.uniform(0, 1, shape)
 
-        return (
-            (strength + strength.T) / 2
-            if symmetric
-            else strength
-        )
+        return (strength + strength.T) / 2 if symmetric else strength
 
 
 class Output(object):
@@ -103,8 +99,8 @@ class Output(object):
         """Set the values on the output, verifying the shape is right."""
         if vals.shape != self.shape:
             raise ValueError(
-                'Dimension mismatch when specifying output values. '
-                'Expected {0}, but got {1}'.format(self.shape, vals.shape)
+                "Dimension mismatch when specifying output values. "
+                "Expected {0}, but got {1}".format(self.shape, vals.shape)
             )
         self._values = vals
 
@@ -115,7 +111,7 @@ class Output(object):
         elif isinstance(idxs, int):
             return OutputSlice(self, slice(idxs))
         else:
-            raise IndexError('Invalid slicing of an Output: {0}'.format(idxs))
+            raise IndexError("Invalid slicing of an Output: {0}".format(idxs))
 
 
 class OutputMerge(Output):
@@ -129,7 +125,7 @@ class OutputMerge(Output):
             axis: Axis along which to concatenate them
         """
         if not outputs:
-            raise ValueError('Need at least two outputs to merge')
+            raise ValueError("Need at least two outputs to merge")
 
         if axis is None:
             axis = self.pick_axis(outputs)
@@ -137,8 +133,7 @@ class OutputMerge(Output):
         self._axis = axis
         self._outputs = outputs
         self.shape = np.concatenate(
-            [output.values for output in self._outputs],
-            axis=axis
+            [output.values for output in self._outputs], axis=axis
         ).shape
 
     def merge(self, outputs, axis):
@@ -148,10 +143,7 @@ class OutputMerge(Output):
             outputs: The outputs to merge
             axis: The axis along which to concatenate
         """
-        return np.concatenate(
-            [output.values for output in outputs],
-            axis=axis
-        )
+        return np.concatenate([output.values for output in outputs], axis=axis)
 
     def pick_axis(self, outputs):
         """Pick an axis for concatenating the outputs.
@@ -173,9 +165,10 @@ class OutputMerge(Output):
             except:
                 pass
         raise ValueError(
-            'No single axis can be used to merge outputs of shapes {}'.format(
+            "No single axis can be used to merge outputs of shapes {}".format(
                 [output.shape for output in outputs]
-            ))
+            )
+        )
 
     @property
     def values(self):

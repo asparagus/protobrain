@@ -1,7 +1,4 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 """Module for implementation of a benchmark to evaluate architectures."""
-from protobrain.metrics import metric
 
 
 class Benchmark(object):
@@ -48,7 +45,7 @@ class Benchmark(object):
                 result = metric.compute()
                 brain_results[metric.name] = result
                 if verbose:
-                    print('Brain #%i - %s' % (i, result))
+                    print("Brain #%i - %s" % (i, result))
 
             metric_results.append(brain_results)
         return metric_results

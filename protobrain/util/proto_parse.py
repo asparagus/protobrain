@@ -1,14 +1,12 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 """Module for dealing with protobuf parsing.
 
 Ths handles protobuf encoding and decoding for classes in the project.
 """
+
 import numpy as np
 from protobrain import neuron
 from protobrain.encoders import numerical
 from protobrain.proto import encoder_pb2
-from protobrain.proto import experiment_pb2
 from protobrain.proto import sdr_pb2
 from protobrain.proto import snapshot_pb2
 
@@ -28,17 +26,17 @@ def decode_encoder(encoder_proto):
         encoder = numerical.CyclicEncoder(
             length=encoder_proto.shape[0],
             min_value=encoder_proto.Extensions[ext].min_value,
-            max_value=encoder_proto.Extensions[ext].max_value
+            max_value=encoder_proto.Extensions[ext].max_value,
         )
     elif encoder_proto.type == encoder_pb2.Encoder.NUMERICAL_SIMPLE:
         ext = encoder_pb2.SimpleEncoder.simple_encoder
         encoder = numerical.SimpleEncoder(
             length=encoder_proto.shape[0],
             min_value=encoder_proto.Extensions[ext].min_value,
-            max_value=encoder_proto.Extensions[ext].max_value
+            max_value=encoder_proto.Extensions[ext].max_value,
         )
     else:
-        raise ValueError('Invalid configuration:\n' + str(encoder_proto))
+        raise ValueError("Invalid configuration:\n" + str(encoder_proto))
 
     return encoder
 
@@ -66,7 +64,7 @@ def decode_input(input_proto):
         The input decoded from the protobuf
     """
     for inp in input_proto:
-        yield getattr(inp, inp.WhichOneof('value'))
+        yield getattr(inp, inp.WhichOneof("value"))
 
 
 def encode_brain(brain, out=None):

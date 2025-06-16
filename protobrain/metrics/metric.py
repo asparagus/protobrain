@@ -1,17 +1,20 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+"""Metric module."""
+
 import abc
-from protobrain import neuron
 
 
 class MetricResults(object):
     """Results from a metric evaluation."""
 
-    def __init__(self, metric_name, *,
-                 global_result=None,
-                 per_layer_result=None,
-                 per_step_result=None,
-                 per_layer_per_step_result=None):
+    def __init__(
+        self,
+        metric_name,
+        *,
+        global_result=None,
+        per_layer_result=None,
+        per_step_result=None,
+        per_layer_per_step_result=None,
+    ):
         """Initialize the results.
 
         Results require a metric's name and optionally allow setting values at
@@ -33,17 +36,17 @@ class MetricResults(object):
 
     def __str__(self):
         """Get the string representation of this metric."""
-        data = ['%s:' % self.metric_name]
+        data = ["%s:" % self.metric_name]
         if self.global_result:
-            data.append('Global: %s' % self.global_result)
+            data.append("Global: %s" % self.global_result)
         if self.per_layer_result:
-            data.append('Per layer:\n%s' % self.per_layer_result)
+            data.append("Per layer:\n%s" % self.per_layer_result)
         if self.per_step_result:
-            data.append('Per step:\n%s' % self.per_step_result)
+            data.append("Per step:\n%s" % self.per_step_result)
         if self.per_layer_per_step_result:
-            data.append('Per layer - per step:\n%s' % self.per_layer_per_step_result)
+            data.append("Per layer - per step:\n%s" % self.per_layer_per_step_result)
 
-        return '\n'.join(data)
+        return "\n".join(data)
 
 
 class Metric(abc.ABC):

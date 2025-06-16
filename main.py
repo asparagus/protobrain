@@ -8,7 +8,7 @@ from protobrain.proto import snapshot_pb2
 from protobrain.util import proto_io
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     exp = experiment_pb2.Experiment()
     exp.encoder.type = encoder_pb2.Encoder.NUMERICAL_CYCLIC
     exp.encoder.shape.extend([98])
@@ -28,13 +28,18 @@ if __name__ == '__main__':
     inp = exp.input.add()
     inp.int = 4
 
-    with tempfile.NamedTemporaryFile('wb') as input_file:
-        with tempfile.NamedTemporaryFile('rb') as output_file:
+    with tempfile.NamedTemporaryFile("wb") as input_file:
+        with tempfile.NamedTemporaryFile("rb") as output_file:
             input_file.write(exp.SerializeToString())
             input_file.seek(0)
 
             subprocess.run(
-                ['python', 'protobrain/cli/experiment.py', input_file.name, output_file.name]
+                [
+                    "python",
+                    "protobrain/cli/experiment.py",
+                    input_file.name,
+                    output_file.name,
+                ]
             )
 
             output_file.seek(0)
@@ -42,4 +47,4 @@ if __name__ == '__main__':
             for proto in reader:
                 print(proto)
 
-    print('Finished')
+    print("Finished")

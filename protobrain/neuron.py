@@ -1,8 +1,7 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 """Module dealing with Neurons."""
-import numpy as np
+
 import logging
+
 from protobrain import computation
 from protobrain import learning
 from protobrain import synapses
@@ -14,7 +13,7 @@ log = logging.getLogger(__name__)
 class Neurons(object):
     """Class representing neurons."""
 
-    MAIN_INPUT = 'main'
+    MAIN_INPUT = "main"
 
     def __init__(self, shape, computation=None, learning=None):
         """Initialize the neurons.
@@ -27,9 +26,7 @@ class Neurons(object):
         if isinstance(shape, int):
             shape = (shape,)
 
-        self.inputs = {
-            self.MAIN_INPUT: synapses.Input(self.MAIN_INPUT, shape=shape)
-        }
+        self.inputs = {self.MAIN_INPUT: synapses.Input(self.MAIN_INPUT, shape=shape)}
         self.output = synapses.Output(shape=shape)
         self.computation = computation
         self.learning = learning
@@ -37,7 +34,7 @@ class Neurons(object):
     def compute(self):
         """Compute the output of this neuron."""
         if not self.computation:
-            raise ValueError('Computation function not set for %s!' % self)
+            raise ValueError("Computation function not set for %s!" % self)
         self.output.values = self.computation(**self.inputs)
         return self.values
 
@@ -66,10 +63,7 @@ class Neurons(object):
             The input that goes by that name.
         """
         if name not in self.inputs:
-            raise IndexError(
-                '{0} not set as an input for {1}'.format(
-                    name, repr(self)
-                ))
+            raise IndexError("{0} not set as an input for {1}".format(name, repr(self)))
         return self.inputs[name]
 
     def set(self, name, output, synapse_function=None):
@@ -104,9 +98,7 @@ class LayeredNeurons(Neurons):
         self.output = self.layers[-1].output
 
         if self.inputs[self.MAIN_INPUT].connected:
-            log.warning(
-                'Creating layers with pre-connected input'
-            )
+            log.warning("Creating layers with pre-connected input")
 
     def learn(self):
         """Adjust the synapses to learn."""
@@ -144,7 +136,7 @@ class LayeredNeurons(Neurons):
             layer.learning = function[i]
 
 
-def FeedForward(layers, input_name='main', synapse_function=None):
+def FeedForward(layers, input_name="main", synapse_function=None):
     """Connect all the layers in a feed forward fashion.
 
     Each layer's output will be connected to the next layer's input

@@ -1,28 +1,30 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+"""Tests for Spike Density metric."""
+
 import pytest
 import numpy as np
+
 from protobrain import neuron
 from protobrain.metrics import spike_density
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def neurons():
     return neuron.Neurons(4, None)
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def layers():
-    return neuron.FeedForward([neuron.Neurons(i, None)
-                               for i in (4, 4, 4, 4)])
+    return neuron.FeedForward([neuron.Neurons(i, None) for i in (4, 4, 4, 4)])
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def non_uniform_layers(layers, neurons):
-    return neuron.FeedForward([
-        layers,
-        neurons,
-    ])
+    return neuron.FeedForward(
+        [
+            layers,
+            neurons,
+        ]
+    )
 
 
 def test_no_timesteps(neurons):
@@ -40,7 +42,7 @@ def test_constant_density_neurons(neurons):
     metric.next(neurons)
 
     result = metric.compute()
-    assert result.metric_name == 'spike_density'
+    assert result.metric_name == "spike_density"
     assert result.global_result == 0.25
     assert result.per_layer_result == 0.25
     assert result.per_step_result == [0.25, 0.25]
@@ -57,12 +59,14 @@ def test_constant_density_layers(layers):
     metric.next(layers)
 
     result = metric.compute()
-    assert result.metric_name == 'spike_density'
+    assert result.metric_name == "spike_density"
     assert result.global_result == 0.25
     assert result.per_layer_result == [0.25, 0.25, 0.25, 0.25]
     assert result.per_step_result == [0.25, 0.25]
-    assert result.per_layer_per_step_result == [(0.25, 0.25, 0.25, 0.25),
-                                                (0.25, 0.25, 0.25, 0.25)]
+    assert result.per_layer_per_step_result == [
+        (0.25, 0.25, 0.25, 0.25),
+        (0.25, 0.25, 0.25, 0.25),
+    ]
 
 
 def test_constant_non_uniform_layers(non_uniform_layers):
@@ -77,13 +81,14 @@ def test_constant_non_uniform_layers(non_uniform_layers):
     metric.next(non_uniform_layers)
 
     result = metric.compute()
-    assert result.metric_name == 'spike_density'
+    assert result.metric_name == "spike_density"
     assert result.global_result == 0.25
     assert result.per_layer_result == [[0.25, 0.25, 0.25, 0.25], 0.25]
     assert result.per_step_result == [0.25, 0.25]
     assert result.per_layer_per_step_result == [
         ((0.25, 0.25, 0.25, 0.25), 0.25),
-        ((0.25, 0.25, 0.25, 0.25), 0.25)]
+        ((0.25, 0.25, 0.25, 0.25), 0.25),
+    ]
 
 
 def test_changing_density_neurons(neurons):
@@ -96,7 +101,7 @@ def test_changing_density_neurons(neurons):
     metric.next(neurons)
 
     result = metric.compute()
-    assert result.metric_name == 'spike_density'
+    assert result.metric_name == "spike_density"
     assert result.global_result == pytest.approx(0.375)
     assert result.per_layer_result == 0.375
     assert result.per_step_result == [0.25, 0.50]
@@ -115,12 +120,14 @@ def test_changing_density_layers(layers):
     metric.next(layers)
 
     result = metric.compute()
-    assert result.metric_name == 'spike_density'
+    assert result.metric_name == "spike_density"
     assert result.global_result == pytest.approx(0.375)
     assert result.per_layer_result == [0.375, 0.375, 0.375, 0.375]
     assert result.per_step_result == [0.25, 0.50]
-    assert result.per_layer_per_step_result == [(0.25, 0.25, 0.25, 0.25),
-                                                (0.50, 0.50, 0.50, 0.50)]
+    assert result.per_layer_per_step_result == [
+        (0.25, 0.25, 0.25, 0.25),
+        (0.50, 0.50, 0.50, 0.50),
+    ]
 
 
 def test_changing_density_non_uniform_layers(non_uniform_layers):
@@ -139,10 +146,11 @@ def test_changing_density_non_uniform_layers(non_uniform_layers):
     metric.next(non_uniform_layers)
 
     result = metric.compute()
-    assert result.metric_name == 'spike_density'
+    assert result.metric_name == "spike_density"
     assert result.global_result == pytest.approx(0.425)
     assert result.per_layer_result == [[0.375, 0.375, 0.375, 0.375], 0.625]
     assert result.per_step_result == [0.3, 0.55]
     assert result.per_layer_per_step_result == [
         ((0.25, 0.25, 0.25, 0.25), 0.50),
-        ((0.50, 0.50, 0.50, 0.50), 0.75)]
+        ((0.50, 0.50, 0.50, 0.50), 0.75),
+    ]

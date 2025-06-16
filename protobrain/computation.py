@@ -1,7 +1,7 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 """A module for defining different kinds of neuronal computations."""
+
 import abc
+
 import numpy as np
 
 
@@ -71,14 +71,14 @@ class SparseComputation(Computation):
         """
         activations = np.dot(main.values, main.synapses)
 
-        n = (int(np.ceil(self.n * len(activations)))
-             if isinstance(self.n, float)
-             else self.n)
+        n = (
+            int(np.ceil(self.n * len(activations)))
+            if isinstance(self.n, float)
+            else self.n
+        )
 
         top_indices = activations.argsort()[-n:]
 
         result = np.zeros(len(activations))
         result[top_indices] = 1
         return result
-
-

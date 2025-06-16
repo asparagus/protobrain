@@ -1,7 +1,7 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 """Module for implementation of the SpikeDensity metric."""
+
 import numpy as np
+
 from protobrain import neuron
 from protobrain.metrics import metric
 
@@ -11,7 +11,7 @@ class SpikeDensity(metric.Metric):
 
     def __init__(self):
         """Initialize the metric."""
-        super().__init__('spike_density')
+        super().__init__("spike_density")
 
     def reset(self):
         """Reset all accumulators."""
@@ -33,9 +33,8 @@ class SpikeDensity(metric.Metric):
 
     def _size_per_layer(self, layer):
         if isinstance(layer, neuron.LayeredNeurons):
-            return tuple(self._size_per_layer(l)
-                         for l in layer.layers)
-        size = 1.
+            return tuple(self._size_per_layer(l) for l in layer.layers)
+        size = 1.0
         for dim in layer.shape:
             size *= dim
 
@@ -43,16 +42,19 @@ class SpikeDensity(metric.Metric):
 
     def _spike_density_per_layer(self, layer, size):
         if isinstance(layer, neuron.LayeredNeurons):
-            return tuple(self._spike_density_per_layer(l, size[i])
-                         for i, l in enumerate(layer.layers))
+            return tuple(
+                self._spike_density_per_layer(l, size[i])
+                for i, l in enumerate(layer.layers)
+            )
 
         spike_density = np.sum(layer.output.values) / size
         return spike_density
 
     def _aggregate_over_time(self):
         if isinstance(self._sizes_per_layer, int):
-            return (np.sum(self._density_per_step_per_layer) /
-                    len(self._density_per_step_per_layer))
+            return np.sum(self._density_per_step_per_layer) / len(
+                self._density_per_step_per_layer
+            )
 
         num_steps = len(self._density_per_step_per_layer)
         if num_steps == 1:
@@ -61,7 +63,8 @@ class SpikeDensity(metric.Metric):
         accumulated_layer_density = None
         for layer_density in self._density_per_step_per_layer:
             accumulated_layer_density = self._accumulate_partials(
-                accumulated_layer_density, layer_density, num_steps)
+                accumulated_layer_density, layer_density, num_steps
+            )
 
         return accumulated_layer_density
 
@@ -85,8 +88,10 @@ class SpikeDensity(metric.Metric):
 
         num_steps = len(self._density_per_step_per_layer)
 
-        per_step_density = [self._average_density(layer_density, self._sizes_per_layer)[0]
-                            for layer_density in self._density_per_step_per_layer]
+        per_step_density = [
+            self._average_density(layer_density, self._sizes_per_layer)[0]
+            for layer_density in self._density_per_step_per_layer
+        ]
 
         return per_step_density
 
@@ -95,7 +100,7 @@ class SpikeDensity(metric.Metric):
 
     def _average_density(self, layer_density, size):
         if isinstance(layer_density, tuple):
-            weighted_density = 0.
+            weighted_density = 0.0
             total_weight = 0
             for i, sublayer_density in enumerate(layer_density):
                 d, w = self._average_density(sublayer_density, size[i])
@@ -109,7 +114,7 @@ class SpikeDensity(metric.Metric):
     def compute(self):
         """Compute the metric based on the saved state."""
         if not self._sizes_per_layer:
-            raise RuntimeError('No iterations - cannot compute metric')
+            raise RuntimeError("No iterations - cannot compute metric")
 
         per_step_result = self._aggregate_over_layers()
         return metric.MetricResults(

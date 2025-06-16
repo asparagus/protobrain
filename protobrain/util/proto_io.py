@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 """Module for writing and reading multiple protobufs to a file."""
 
 
@@ -21,7 +19,7 @@ class ProtoWriter:
             proto: A protobuf object to write.
         """
         proto_bytes = proto.SerializeToString()
-        length_bytes = len(proto_bytes).to_bytes(4, 'big')
+        length_bytes = len(proto_bytes).to_bytes(4, "big")
         self.open_file.write(length_bytes)
         self.open_file.write(proto_bytes)
 
@@ -46,15 +44,7 @@ class ProtoReader:
             if not length_bytes:
                 break
 
-            length = int.from_bytes(
-                length_bytes,
-                byteorder='big',
-                signed=False
-            )
+            length = int.from_bytes(length_bytes, byteorder="big", signed=False)
 
             proto_bytes = self.open_file.read(length)
             yield self.proto_class.FromString(proto_bytes)
-
-
-
-

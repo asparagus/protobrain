@@ -1,8 +1,9 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 """A module for defining different kinds of neuronal learning."""
+
 import abc
+
 import numpy as np
+
 from protobrain import neuron
 
 
@@ -54,12 +55,9 @@ class HebbianLearning(Learning):
         for input_name, input_unit in neurons.inputs.items():
             active_inputs = np.array(input_unit.values) == 1
             zeros = input_unit.synapses == 0
-            input_unit.synapses[
-                np.ix_(active_inputs, ~active_neurons)] -= self.decrease
-            input_unit.synapses[
-                np.ix_(~active_inputs, active_neurons)] -= self.decrease
-            input_unit.synapses[
-                np.ix_(active_inputs, active_neurons)] += self.increase
+            input_unit.synapses[np.ix_(active_inputs, ~active_neurons)] -= self.decrease
+            input_unit.synapses[np.ix_(~active_inputs, active_neurons)] -= self.decrease
+            input_unit.synapses[np.ix_(active_inputs, active_neurons)] += self.increase
 
             input_unit.synapses[zeros] = 0
             input_unit.synapses = np.clip(input_unit.synapses, 0, 1)

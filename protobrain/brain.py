@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 """The top-level module for dealing with a brain instance."""
 
 
