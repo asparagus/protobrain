@@ -3,7 +3,7 @@
 import abc
 
 
-class MetricResults(object):
+class MetricResults:
     """Results from a metric evaluation."""
 
     def __init__(

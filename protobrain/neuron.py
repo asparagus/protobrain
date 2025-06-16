@@ -10,7 +10,7 @@ from protobrain import synapses
 log = logging.getLogger(__name__)
 
 
-class Neurons(object):
+class Neurons:
     """Class representing neurons."""
 
     MAIN_INPUT = "main"

@@ -8,7 +8,7 @@ import numpy as np
 log = logging.getLogger(__name__)
 
 
-class Input(object):
+class Input:
     """An input connection with synapses.
 
     Inputs are identified by a name and set up their synapses when connected
@@ -77,7 +77,7 @@ class Input(object):
         return (strength + strength.T) / 2 if symmetric else strength
 
 
-class Output(object):
+class Output:
     """An output to which an input can connect."""
 
     def __init__(self, shape):

@@ -1,7 +1,7 @@
 """Module for implementation of a benchmark to evaluate architectures."""
 
 
-class Benchmark(object):
+class Benchmark:
     """Benchmark objects evaluate metrics on given architectures."""
 
     def __init__(self, metrics):
