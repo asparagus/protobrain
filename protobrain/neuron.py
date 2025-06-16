@@ -34,12 +34,14 @@ class Neurons:
     def compute(self):
         """Compute the output of this neuron."""
         if not self.computation:
-            raise ValueError("Computation function not set for %s!" % self)
+            raise ValueError(f"Computation function not set for {self}!")
         self.output.values = self.computation(**self.inputs)
         return self.values
 
     def learn(self):
         """Adjust the synapses to learn."""
+        if not self.computation:
+            raise ValueError(f"Learning function not set for {self}!")
         if self.learning:
             self.learning(self)
 
