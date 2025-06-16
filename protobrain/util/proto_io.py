@@ -1,10 +1,12 @@
 """Module for writing and reading multiple protobufs to a file."""
 
+import io
+
 
 class ProtoWriter:
     """Class for writing multiple protobufs to a file."""
 
-    def __init__(self, open_file):
+    def __init__(self, open_file: io.BufferedWriter):
         """Initialize the ProtoWriter.
 
         Args:
@@ -27,7 +29,7 @@ class ProtoWriter:
 class ProtoReader:
     """Class for reading multiple protobufs of the same type from a file."""
 
-    def __init__(self, open_file, proto_class):
+    def __init__(self, open_file: io.BufferedReader, proto_class):
         """Initialize the ProtoReader.
 
         Args:

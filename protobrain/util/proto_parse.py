@@ -11,7 +11,7 @@ from protobrain.proto import sdr_pb2
 from protobrain.proto import snapshot_pb2
 
 
-def decode_encoder(encoder_proto):
+def decode_encoder(encoder_proto) -> numerical.NumericalEncoder:
     """Obtain an instance of Encoder from a protobuf.
 
     Args:
@@ -41,7 +41,7 @@ def decode_encoder(encoder_proto):
     return encoder
 
 
-def decode_neurons(neurons_proto):
+def decode_neurons(neurons_proto) -> neuron.LayeredNeurons:
     """Obtain an instance of Neurons from a protobuf.
 
     Args:

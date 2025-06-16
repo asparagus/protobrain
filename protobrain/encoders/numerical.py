@@ -10,7 +10,9 @@ from protobrain import sensor
 class NumericalEncoder(sensor.Encoder):
     """Base encoder for numerical types."""
 
-    def __init__(self, min_value, max_value, length, sparsity=0.02):
+    def __init__(
+        self, min_value: float, max_value: float, length: int, sparsity: float = 0.02
+    ):
         """Initialize the encoder.
 
         Args:
@@ -34,7 +36,7 @@ class NumericalEncoder(sensor.Encoder):
 class SimpleEncoder(NumericalEncoder):
     """The simplest numerical encoder."""
 
-    def encode(self, value):
+    def encode(self, value: float):
         """Encode a value.
 
         The signal length is determined by the output length and the sparsity.
@@ -63,7 +65,7 @@ class SimpleEncoder(NumericalEncoder):
 class CyclicEncoder(NumericalEncoder):
     """A cyclic encoder, similar to the SimpleEncoder, but loops."""
 
-    def encode(self, value):
+    def encode(self, value: float):
         """Encode a value.
 
         The signal length is determined by the output length and the sparsity.
