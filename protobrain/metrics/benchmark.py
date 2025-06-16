@@ -1,5 +1,10 @@
 """Module for implementation of a benchmark to evaluate architectures."""
 
+import logging
+
+
+log = logging.getLogger(__name__)
+
 
 class Benchmark:
     """Benchmark objects evaluate metrics on given architectures."""
@@ -26,6 +31,7 @@ class Benchmark:
             Results consist of {'metric_name': protobrain.metric.MetricResults}
             entries for each metric.
         """
+        log.setLevel(logging.DEBUG)
         metric_results = []
         for i, brain in enumerate(brains):
             for metric in self.metrics:
@@ -44,8 +50,7 @@ class Benchmark:
             for metric in self.metrics:
                 result = metric.compute()
                 brain_results[metric.name] = result
-                if verbose:
-                    print("Brain #%i - %s" % (i, result))
+                log.debug("Brain #%i - %s", i, result)
 
             metric_results.append(brain_results)
         return metric_results
