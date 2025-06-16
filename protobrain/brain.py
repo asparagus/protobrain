@@ -1,10 +1,21 @@
 """The top-level module for dealing with a brain instance."""
 
+from protobrain import computation as _computation
+from protobrain import learning as _learning
+from protobrain import neuron
+from protobrain import sensor
+
 
 class Brain:
     """A class for handling a protobrain."""
 
-    def __init__(self, neurons, sensor, computation=None, learning=None):
+    def __init__(
+        self,
+        neurons: neuron.Neurons,
+        sensor: sensor.Sensor,
+        computation: _computation.Computation | None = None,
+        learning: _learning.Learning | None = None,
+    ):
         """Initialize the protobrain.
 
         Args:

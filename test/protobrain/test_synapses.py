@@ -20,7 +20,7 @@ def test_merge_output():
     out1 = synapses.Output(5)
     out2 = synapses.Output(8)
 
-    outm = synapses.OutputMerge([out1, out2])
+    outm = synapses.OutputMerge(out1, out2)
 
     assert outm.shape == (13,)
 
@@ -59,7 +59,7 @@ def test_connect_input_merged_output():
     inp = synapses.Input("", 10)
     out1 = synapses.Output(5)
     out2 = synapses.Output(5)
-    out = synapses.OutputMerge([out1, out2])
+    out = synapses.OutputMerge(out1, out2)
 
     inp.connect(out)
     out1.values = np.ones(5)

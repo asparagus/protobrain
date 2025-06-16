@@ -1,8 +1,12 @@
 """A module for defining different kinds of neuronal computations."""
 
 import abc
+from typing import TYPE_CHECKING
 
 import numpy as np
+
+if TYPE_CHECKING:
+    from protobrain import synapses
 
 
 class Computation(abc.ABC):
@@ -21,7 +25,7 @@ class Computation(abc.ABC):
 class StandardComputation(Computation):
     """The standard computation is a thresholded dot product."""
 
-    def __init__(self, threshold):
+    def __init__(self, threshold: float):
         """Initialize the computation.
 
         Args:
@@ -29,7 +33,7 @@ class StandardComputation(Computation):
         """
         self.threshold = threshold
 
-    def __call__(self, main):
+    def __call__(self, main: "synapses.Input") -> np.array:
         """Compute the neurons' output.
 
         For each neuron, adds up the weight of the active synapses,
@@ -48,7 +52,7 @@ class StandardComputation(Computation):
 class SparseComputation(Computation):
     """A computation with a limited number of active units."""
 
-    def __init__(self, n):
+    def __init__(self, n: int | float):
         """Initialize the computation.
 
         Args:
@@ -57,7 +61,7 @@ class SparseComputation(Computation):
         """
         self.n = n
 
-    def __call__(self, main):
+    def __call__(self, main: "synapses.Input"):
         """Compute the neurons' output.
 
         For each neuron, adds up the weight of the active synapses,

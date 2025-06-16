@@ -1,17 +1,19 @@
 """A module for defining different kinds of neuronal learning."""
 
 import abc
+from typing import TYPE_CHECKING
 
 import numpy as np
 
-from protobrain import neuron
+if TYPE_CHECKING:
+    from protobrain import neuron
 
 
 class Learning(abc.ABC):
     """The base class for all learning functions."""
 
     @abc.abstractmethod
-    def __call__(self, neurons):
+    def __call__(self, neurons: "neuron.Neurons"):
         """Make the neurons learn.
 
         Args:
@@ -27,7 +29,7 @@ class HebbianLearning(Learning):
     'Neurons that fire apart, wire apart'
     """
 
-    def __init__(self, increase=0.05, decrease=0.002):
+    def __init__(self, increase: float = 0.05, decrease: float = 0.002):
         """Initialize the Hebbian learning with appropriate constants.
 
         Args:
@@ -37,7 +39,7 @@ class HebbianLearning(Learning):
         self.increase = increase
         self.decrease = decrease
 
-    def __call__(self, neurons):
+    def __call__(self, neurons: "neuron.Neurons"):
         """Make the neurons learn.
 
         Increase the weights on synapses where input and output were active.
@@ -46,13 +48,8 @@ class HebbianLearning(Learning):
         Args:
             neurons: The neurons to update
         """
-        if isinstance(neurons, neuron.LayeredNeurons):
-            for layer in neurons.layers:
-                self(layer)
-            return
-
         active_neurons = np.array(neurons.output.values) == 1
-        for input_name, input_unit in neurons.inputs.items():
+        for _, input_unit in neurons.inputs.items():
             active_inputs = np.array(input_unit.values) == 1
             zeros = input_unit.synapses == 0
             input_unit.synapses[np.ix_(active_inputs, ~active_neurons)] -= self.decrease

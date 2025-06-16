@@ -1,6 +1,7 @@
 """Module for handling neuron connections."""
 
 import logging
+from typing import Callable
 
 import numpy as np
 
@@ -15,24 +16,31 @@ class Input:
     to an output.
     """
 
-    def __init__(self, name, shape):
+    def __init__(self, name: str, shape: tuple[int, ...] | int):
         """Initialize the input.
 
         Args:
             name: The name of the input
             shape: The shape of the neurons this input is feeding
         """
+        if isinstance(shape, int):
+            shape = (shape,)
         self.name = name
-        self.shape = np.zeros(shape).shape  # TODO: Not the most efficient
+        self.shape = shape
         self.synapses = None
         self._connected_output = None
 
     @property
-    def connected(self):
+    def connected(self) -> bool:
         """Whether the input is connected to an output."""
         return self._connected_output is not None
 
-    def connect(self, output, synapse_function=None):
+    def connect(
+        self,
+        output: "Output",
+        synapse_function: Callable[[tuple[int, ...], tuple[int, ...]], None]
+        | None = None,
+    ):
         """Connect this input to an output.
 
         Creates the synapses to match the output's dimensions.
@@ -51,16 +59,21 @@ class Input:
         self._connected_output = output
 
     @property
-    def values(self):
+    def values(self) -> np.array:
         """The values available to this input.
 
         These are taken from the connected output."""
         if not self._connected_output:
-            raise IndexError("No input set for {1}".format(repr(self)))
+            raise IndexError(f"No input set for {self}")
         return self._connected_output.values
 
     @classmethod
-    def _create_synapses(cls, output_shape, input_shape, symmetric=False):
+    def _create_synapses(
+        cls,
+        output_shape: tuple[int, ...],
+        input_shape: tuple[int, ...],
+        symmetric: bool = False,
+    ) -> np.array:
         """Create the synapses between an input and an output.
 
         Args:
@@ -80,22 +93,24 @@ class Input:
 class Output:
     """An output to which an input can connect."""
 
-    def __init__(self, shape):
+    def __init__(self, shape: tuple[int, ...] | int):
         """Initialize the output.
 
         Args:
             shape: The output's shape
         """
+        if isinstance(shape, int):
+            shape = (shape,)
         self._values = np.zeros(shape)
         self.shape = self._values.shape
 
     @property
-    def values(self):
+    def values(self) -> np.array:
         """The values available at this output."""
         return self._values
 
     @values.setter
-    def values(self, vals):
+    def values(self, vals: np.array) -> None:
         """Set the values on the output, verifying the shape is right."""
         if vals.shape != self.shape:
             raise ValueError(
@@ -104,7 +119,7 @@ class Output:
             )
         self._values = vals
 
-    def __getitem__(self, idxs):
+    def __getitem__(self, idxs) -> "OutputSlice":
         """Slice the Output."""
         if isinstance(idxs, slice) or isinstance(idxs, tuple):
             return OutputSlice(self, idxs)
@@ -117,7 +132,7 @@ class Output:
 class OutputMerge(Output):
     """Output that merges two or more outputs."""
 
-    def __init__(self, outputs, axis=None):
+    def __init__(self, *outputs: Output, axis: int | None = None):
         """Initialize the output.
 
         Args:
@@ -136,7 +151,7 @@ class OutputMerge(Output):
             [output.values for output in self._outputs], axis=axis
         ).shape
 
-    def merge(self, outputs, axis):
+    def _merge(self, outputs: tuple[Output], axis: int) -> np.array:
         """Merge the output values.
 
         Args:
@@ -145,7 +160,7 @@ class OutputMerge(Output):
         """
         return np.concatenate([output.values for output in outputs], axis=axis)
 
-    def pick_axis(self, outputs):
+    def pick_axis(self, outputs: tuple[Output]) -> int:
         """Pick an axis for concatenating the outputs.
 
         Args:
@@ -160,9 +175,9 @@ class OutputMerge(Output):
         axis_options = range(len(outputs[0].shape))
         for axis in axis_options:
             try:
-                self.merge(outputs, axis)
+                self._merge(outputs, axis)
                 return axis
-            except:
+            except Exception:
                 pass
         raise ValueError(
             "No single axis can be used to merge outputs of shapes {}".format(
@@ -171,15 +186,15 @@ class OutputMerge(Output):
         )
 
     @property
-    def values(self):
+    def values(self) -> np.array:
         """Concatenate the values from the merged outputs."""
-        return self.merge(self._outputs, self._axis)
+        return self._merge(self._outputs, self._axis)
 
 
 class OutputSlice(Output):
     """A slice of an output."""
 
-    def __init__(self, output, slice):
+    def __init__(self, output: Output, slice: slice):
         """Initialize the output.
 
         Args:
@@ -190,11 +205,11 @@ class OutputSlice(Output):
         self._slice = slice
 
     @property
-    def shape(self):
+    def shape(self) -> tuple[int, ...]:
         """The shape of the output."""
         return self.values.shape
 
     @property
-    def values(self):
+    def values(self) -> np.array:
         """Slice the values from the internal output."""
         return self._output.values[self._slice]
