@@ -12,7 +12,7 @@ from protobrain import sensor
 logger = logging.getLogger(__name__)
 
 
-class ImageEncoder(sensor.Encoder[np.array]):
+class ImageEncoder(sensor.Encoder[np.ndarray]):
     """Base encoder for image types."""
 
     def __init__(self, height: int, width: int, length: int):
@@ -75,7 +75,7 @@ class BlackWhiteEncoder(ImageEncoder):
         self.repeats = min_fits - 1
         self.normalize = normalize
 
-    def encode(self, value: np.array):
+    def encode(self, value: np.ndarray):
         """Encode the value to a binary representation.
 
         Args:

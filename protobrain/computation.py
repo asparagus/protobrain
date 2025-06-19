@@ -33,7 +33,7 @@ class StandardComputation(Computation):
         """
         self.threshold = threshold
 
-    def __call__(self, main: "synapses.Input") -> np.array:
+    def __call__(self, main: "synapses.Input") -> np.ndarray:
         """Compute the neurons' output.
 
         For each neuron, adds up the weight of the active synapses,

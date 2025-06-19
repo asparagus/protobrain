@@ -39,7 +39,7 @@ class Neurons:
         self.computation = computation
         self.learning = learning
 
-    def compute(self) -> np.array:
+    def compute(self) -> np.ndarray:
         """Compute the output of this neuron."""
         if not self.computation:
             raise ValueError(f"Computation function not set for {self}!")
@@ -94,7 +94,7 @@ class Neurons:
         self.inputs[name].connect(output, synapse_function)
 
     @property
-    def values(self) -> np.array:
+    def values(self) -> np.ndarray:
         """The values at the output of these neurons."""
         return self.output.values
 
@@ -120,7 +120,7 @@ class LayeredNeurons(Neurons):
         for layer in self.layers:
             layer.learn()
 
-    def compute(self) -> np.array:
+    def compute(self) -> np.ndarray:
         """Compute the output of these layers."""
         for layer in self.layers:
             layer.compute()

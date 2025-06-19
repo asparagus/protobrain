@@ -62,7 +62,7 @@ class Sensor[T]:
         self.feed(output)
 
     @property
-    def values(self) -> np.array:
+    def values(self) -> np.ndarray:
         """The values from the output unit."""
         return self.output.values
 

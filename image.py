@@ -16,13 +16,20 @@ DEFAULT_MIN_RESOLUTION = 4
 DEFAULT_BRIGHTNESS_BUCKETS = 2
 
 
-def display_encoding(values: np.array):
-    length = values.shape[0]
-    sqrt = int(np.ceil(np.sqrt(length)))
-    missing = sqrt * sqrt - length
-    expanded = np.concatenate([values, np.zeros(missing)])
-    formatted = np.astype(expanded, np.uint8).reshape((sqrt, sqrt))
-    return px.imshow(formatted)
+def display_encoding(values: np.ndarray):
+    length = len(values)
+    side_length = int(np.sqrt(length))
+
+    # Pad if necessary
+    if side_length * side_length < length:
+        side_length += 1
+
+    # Reshape and pad with zeros
+    display_values = np.zeros(side_length * side_length)
+    display_values[:length] = values
+    display_values = display_values.reshape(side_length, side_length)
+
+    return px.imshow(display_values)
 
 
 left, right = st.columns(2)

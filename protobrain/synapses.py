@@ -59,7 +59,7 @@ class Input:
         self._connected_output = output
 
     @property
-    def values(self) -> np.array:
+    def values(self) -> np.ndarray:
         """The values available to this input.
 
         These are taken from the connected output."""
@@ -73,7 +73,7 @@ class Input:
         output_shape: tuple[int, ...],
         input_shape: tuple[int, ...],
         symmetric: bool = False,
-    ) -> np.array:
+    ) -> np.ndarray:
         """Create the synapses between an input and an output.
 
         Args:
@@ -105,12 +105,12 @@ class Output:
         self.shape = self._values.shape
 
     @property
-    def values(self) -> np.array:
+    def values(self) -> np.ndarray:
         """The values available at this output."""
         return self._values
 
     @values.setter
-    def values(self, vals: np.array) -> None:
+    def values(self, vals: np.ndarray) -> None:
         """Set the values on the output, verifying the shape is right."""
         if vals.shape != self.shape:
             raise ValueError(
@@ -151,7 +151,7 @@ class OutputMerge(Output):
             [output.values for output in self._outputs], axis=axis
         ).shape
 
-    def _merge(self, outputs: tuple[Output], axis: int) -> np.array:
+    def _merge(self, outputs: tuple[Output], axis: int) -> np.ndarray:
         """Merge the output values.
 
         Args:
@@ -186,7 +186,7 @@ class OutputMerge(Output):
         )
 
     @property
-    def values(self) -> np.array:
+    def values(self) -> np.ndarray:
         """Concatenate the values from the merged outputs."""
         return self._merge(self._outputs, self._axis)
 
@@ -210,6 +210,6 @@ class OutputSlice(Output):
         return self.values.shape
 
     @property
-    def values(self) -> np.array:
+    def values(self) -> np.ndarray:
         """Slice the values from the internal output."""
         return self._output.values[self._slice]
